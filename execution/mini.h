@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/08/29 23:35:04 by hameur           ###   ########.fr       */
+/*   Updated: 2022/08/31 00:15:51 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -63,13 +64,16 @@ char	*ft_strlcat(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int i);
 int		other_fct(char **cmnd, char **env);
 int		ft_strlen(char *str);
-void	ft_pwd();
+void	ft_pwd(char **cmnd);
 int 	execute_cmnd(char **cmnd, char **env);
-void 	ft_env(char **env);
+void	ft_env(char **cmnd, char **env);
 void 	ft_echo(char **cmnd, char **env);
 void	ft_free(char **str);
 void	ft_exit(char **cmnd);
-int		ft_cd(char **cmnd, char **env);
+void	ft_cd(char **cmnd, char **env);
+void	add_back(t_envi **envi, t_envi *new_node);
+t_envi	*new_node(char **env, char *env_x, int x);
+t_envi	*init_envi(char **env);
 
 
 

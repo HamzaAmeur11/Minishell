@@ -1,16 +1,20 @@
 #include "mini.h"
 
-void	ft_pwd()
+void	ft_pwd(char **cmnd)
 {
 	printf("%s\n", getcwd(NULL, 0));
+	ft_free(cmnd);
+	exit(0);
 }
 
-void ft_env(char **env)
+void ft_env(char **cmnd, char **env)
 {
 	int i = -1;
 
 	while (env[++i] != NULL)
 		printf("%s\n", env[i]);
+	ft_free(cmnd);
+	exit(0);
 }
 
 void ft_echo(char **cmnd, char **env)
@@ -23,6 +27,8 @@ void ft_echo(char **cmnd, char **env)
 		printf("%s ", cmnd[i]);
 	}
 	printf("\n");
+	ft_free(cmnd);
+	exit(0);
 }
 
 void ft_exit(char **cmnd)
@@ -31,9 +37,14 @@ void ft_exit(char **cmnd)
 	exit(1);
 }
 
-int	ft_cd(char **cmnd, char **env)
+void	ft_cd(char **cmnd, char **env)
 {
 	if (chdir(cmnd[1]) != 0)
-		return(printf("errorf cd\n"),FAILDE);
-	return (SUCCESS);
+	{
+		printf("errorf cd\n");
+		ft_free(cmnd);
+		exit(1);
+	}
+	ft_free(cmnd);
+	exit(0);
 }

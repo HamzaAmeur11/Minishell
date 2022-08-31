@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/08/30 15:22:43 by hameur           ###   ########.fr       */
+/*   Updated: 2022/08/30 21:14:52 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,16 @@ static char	**ft_remplissage(char *s, char **copy, char c)
 	while (s[start] == c)
 		start++;
 	end = 0;
-	end = find_char(s, end, c, 1);
+	end = find_char(s, end, c, 0);
 	while (end != 0)
 	{
 		copy[i++] = ft_copy(s, start, end);
-		
 		end = find_char(s, end + 1, c, 0);
 		start = find_char(s, start, c, 2) + 1;
 	}
-	copy[i++] = ft_copy(s, start, find_char(s, start + 1, c, 2));
+	end =  find_char(s, start + 1, c, 2);
+	if ((size_t)start != strlen(s))
+		copy[i++] = ft_copy(s, start, end);
 	copy[i] = NULL;
 	return (copy);
 }

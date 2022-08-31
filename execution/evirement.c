@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hameur            #+#    #+#             */
-/*   Updated: 2022/08/29 23:35:21 by hameur           ###   ########.fr       */
+/*   Updated: 2022/08/31 00:29:52 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int builtin_fct(char **cmnd, char **env)
 	if (ft_strncmp(cmnd[0] , (char *)"cd", 2) == SUCCESS)
 		return(ft_cd(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"pwd", 3) == SUCCESS)
-		return(ft_pwd(), SUCCESS);
+		return(ft_pwd(cmnd), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"env", 3) == SUCCESS)
-		return(ft_env(env), SUCCESS);
+		return(ft_env(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"echo", 4) == SUCCESS)
 		return(ft_echo(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"exit", 4) == SUCCESS)
@@ -86,12 +86,12 @@ void ft_error(int i, char **cmnd)
 	exit(1);
 }
 
-int execute_cmnd(char **cmnd, char **env)
+int execute_cmnd(char **cmnd, t_envi **env)
 {
 	if (builtin_fct(cmnd, env) != SUCCESS)
 	{
 		if (other_fct(cmnd, env) != SUCCESS)
-			ft_error(1, cmnd);
+			return(ft_free(cmnd), FAILDE);
 	}
 	return(ft_free(cmnd), SUCCESS);
 }

@@ -11,7 +11,7 @@ void ft_free(char **str)
 	free(str);
 }
 
-int ff(char **env)
+int ff(t_envi **env)
 {
 	/*char *readline(const char *prompt)
 
@@ -30,16 +30,24 @@ int ff(char **env)
 		if (id > 0)
 			id = fork();
 		if (id == 0)
-			execute_cmnd(str, env);
+		{
+			if (execute_cmnd(str, env)!= SUCCESS)
+				printf("eroor f execution\n");
+			ft_free(str);
+		}
 		if(id > 0)
+		{
 			wait(NULL);
+			ft_free(str);
+		}
 	}
 	return (SUCCESS);
 }
 
 int main(int ac, char **av, char **env)
 {
-
-	ff(env);
+	t_envi *envi;
+	envi = init_envi(env);
+	ff(&envi);
 	return (SUCCESS);
 }
