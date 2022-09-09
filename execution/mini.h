@@ -44,6 +44,10 @@ typedef struct t_envi
 {
 	char	**env;
 	char	*env_x;
+	char	*var_name;
+	char	*var_value;
+	//char
+	//variable_name + value//
 	int		x;
 	struct t_envi	*next;
 }	t_envi;
@@ -58,23 +62,28 @@ typedef struct t_list
 }	t_list;
 
 char	**ft_split(char *s, char c);
-char	**find_paths(char **env);
-char	*remove_path(char* s);
+char	**find_paths(t_envi **env);
+char	*remove_debut(char* s, int i);
 char	*ft_strlcat(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int i);
-int		other_fct(char **cmnd, char **env);
+int		other_fct(char **cmnd, t_envi **env);
 int		ft_strlen(char *str);
-void	ft_pwd(char **cmnd);
-int 	execute_cmnd(char **cmnd, char **env);
-void	ft_env(char **cmnd, char **env);
-void 	ft_echo(char **cmnd, char **env);
+int 	execute_cmnd(char **cmnd, t_envi **env);
 void	ft_free(char **str);
-void	ft_exit(char **cmnd);
-void	ft_cd(char **cmnd, char **env);
 void	add_back(t_envi **envi, t_envi *new_node);
-t_envi	*new_node(char **env, char *env_x, int x);
+t_envi	*new_node(char **env, char *env_x);
 t_envi	*init_envi(char **env);
+int		builtin_fct(char **cmnd, t_envi **env);
+void	add_place(t_envi **envi, t_envi *new_node, int i);
+int		size_envi(t_envi *env);
+void	delete_node_env(t_envi **env, int i);
 
-
+void	ft_pwd(char **cmnd, t_envi **env);
+void	ft_exit(char **cmnd, t_envi **env);
+void	ft_cd(char **cmnd, t_envi **env);
+void 	ft_echo(char **cmnd, t_envi **env);
+void	ft_env(char **cmnd, t_envi **env);
+void	ft_export(char **cmnd, t_envi **env);
+void	ft_unset(char **cmnd, t_envi **env);
 
 #endif

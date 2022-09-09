@@ -66,21 +66,3 @@ int	ft_strncmp(char *s1, char *s2, int i)
 		return (0);
 	return (s1[x] - s2[x]);
 }
-
-// int main(int ac, char **av, char **env)
-// {
-// 	// t_list *tst;
-
-// 	// tst = (t_list *)malloc(sizeof(t_list));
-// 	// tst->env = fct(env);
-// 	(void)ac;
-// 	char **argve;
-// 	argve = (char **)malloc(4 * sizeof(char *));
-// 	argve[0] = ft_strdup(av[1]);
-// 	argve[1] = ft_strdup(av[2]);
-// 	//argve[2] = ft_strdup(av[3]);
-// 	argve[2] = NULL;
-// 	int i = check_path(argve , env);
-// 	printf(">>>>>>>>>%d\n", i);
-// 	while(1);
-// }

@@ -13,28 +13,27 @@
 #include "mini.h"
 
 
-int builtin_fct(char **cmnd, char **env)
+int builtin_fct(char **cmnd, t_envi **env)
 {
 	if (ft_strncmp(cmnd[0] , (char *)"cd", 2) == SUCCESS)
 		return(ft_cd(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"pwd", 3) == SUCCESS)
-		return(ft_pwd(cmnd), SUCCESS);
+		return(ft_pwd(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"env", 3) == SUCCESS)
 		return(ft_env(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"echo", 4) == SUCCESS)
 		return(ft_echo(cmnd, env), SUCCESS);
 	if (ft_strncmp(cmnd[0] , (char *)"exit", 4) == SUCCESS)
-		return (ft_exit(cmnd), SUCCESS);
-	// if (ft_strncmp(cmnd[0] , (char *)"unset", 5) == SUCCESS)
-	// 	return(ft_unset(cmnd), SUCCESS);
-	// if (ft_strncmp(cmnd[0] , (char *)"export", 6) == SUCCESS)
-	// 	return(ft_export(cmnd), SUCCESS);
+		return (ft_exit(cmnd, env), SUCCESS);
+	 if (ft_strncmp(cmnd[0] , (char *)"unset", 5) == SUCCESS)
+	 	return(ft_unset(cmnd, env), SUCCESS);
+	 if (ft_strncmp(cmnd[0] , (char *)"export", 6) == SUCCESS)
+	 	return(ft_export(cmnd, env), SUCCESS);
 	return (FAILDE);
 }
 
-char *remove_path(char* s)
+char *remove_debut(char* s, int i)
 {
-	int i = 5;
 	int j = 0;
 	char *str;
 	
@@ -45,23 +44,26 @@ char *remove_path(char* s)
 	return (str);
 }
 
-char **find_paths(char **env)
+char **find_paths(t_envi **env)
 {
 	int i = 0;
 	int j = 1;
-	while (env[i] != NULL)
+	t_envi *temp = *env;
+	char **paths;
+	while (temp != NULL)
 	{
-		j = ft_strncmp(env[i], (char *)"PATH=", 4);
+		j = ft_strncmp(temp->env_x, (char *)"PATH=", 4);
 		if (j == 0)
 			break;
-		i++;
+		temp = temp->next;
 	}
-	char *str = remove_path(env[i]);
-	return (ft_split(str, ':'));
+	char *str = remove_debut(temp->env_x, 5);
+	paths = ft_split(str, ':');
+	return (free(str), paths);
 }
 
 
-int other_fct(char **cmnd, char **env)
+int other_fct(char **cmnd, t_envi **env)
 {
 	char **paths = find_paths(env);
 	char *path_cmnd;
@@ -71,9 +73,9 @@ int other_fct(char **cmnd, char **env)
 		path_cmnd = ft_strlcat(paths[i++], ft_strlcat((char *)"/", cmnd[0]));
 		if (access(path_cmnd, F_OK) == SUCCESS)
 		{
-			if (execve(path_cmnd, cmnd, env) < 0)
-				return(printf("PTH=%s\tcmnd1=%s\tcmnd2=%s\n", path_cmnd, cmnd[0], cmnd[1]), FAILDE);
-			return (SUCCESS);
+			if (execve(path_cmnd, cmnd, (*env)->env) < 0)
+				return(printf("error f execve\n"), ft_free(paths), FAILDE);
+			return (ft_free(paths), SUCCESS);
 		}
 	}
 	return (FAILDE);
@@ -86,12 +88,3 @@ void ft_error(int i, char **cmnd)
 	exit(1);
 }
 
-int execute_cmnd(char **cmnd, t_envi **env)
-{
-	if (builtin_fct(cmnd, env) != SUCCESS)
-	{
-		if (other_fct(cmnd, env) != SUCCESS)
-			return(ft_free(cmnd), FAILDE);
-	}
-	return(ft_free(cmnd), SUCCESS);
-}

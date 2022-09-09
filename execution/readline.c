@@ -18,28 +18,32 @@ int ff(t_envi **env)
 	**read a line from the terminal and return it "ise flag -lreadline"
 	** add_history() add a history of line return by readline*/
 	char *line;
-	char **str;
+	char **cmnd;
 	int id = 1;
 	while(1)
 	{
 		line = readline("Minishel => ");
-		int i = ft_strlen(line);
-		str = ft_split(line, ' ');
-		if (i != 0)
+		int j = ft_strlen(line);
+		cmnd = ft_split(line, ' ');
+		if (j != 0)
 			add_history(line);
-		if (id > 0)
+		if (j == 0)
+			continue ;
+		int i = builtin_fct(cmnd, env);
+		if (id > 0 && i != SUCCESS)
 			id = fork();
 		if (id == 0)
 		{
-			if (execute_cmnd(str, env)!= SUCCESS)
-				printf("eroor f execution\n");
-			ft_free(str);
+			if (other_fct(cmnd, env) != SUCCESS)
+				return(printf("eroor f execution\n"), ft_free(cmnd), FAILDE);
+			ft_free(cmnd);
 		}
-		if(id > 0)
+		if(id > 0 && i != SUCCESS)
 		{
 			wait(NULL);
-			ft_free(str);
+			ft_free(cmnd);
 		}
+
 	}
 	return (SUCCESS);
 }
