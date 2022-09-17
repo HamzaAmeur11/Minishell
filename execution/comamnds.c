@@ -3,7 +3,6 @@
 void	ft_pwd(char **cmnd, t_envi **env)
 {
 	printf("%s\n", getcwd(NULL, 0));
-	ft_free(cmnd);
 }
 
 void ft_env(char **cmnd, t_envi **env)
@@ -15,7 +14,6 @@ void ft_env(char **cmnd, t_envi **env)
 		printf("%s=%s\n", temp->var_name, temp->var_value);
 		temp = temp->next;
 	}
-	ft_free(cmnd);
 }
 
 int print_var(char *var)
@@ -91,7 +89,7 @@ void ft_export(char **cmnd, t_envi **env)
 	int i = size_envi(*env);
 	if (check_var(cmnd[1]) != SUCCESS)
 		return ;
-	add_place(env, new_node((*env)->env, cmnd[1]), i - 1);
+	add_place(env, new_node(cmnd[1]), i - 1);
 }
 
 

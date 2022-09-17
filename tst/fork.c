@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
+
+int x;
+
 int main()
 {
 	/*	pid_t fork(void);
@@ -11,12 +14,15 @@ int main()
 
 	int id = fork();
 	if (id == 0)
-		printf("child prossec %d have a pid : %d\n",id, getpid());
+	{
+		while (x < 10)
+			x++;
+			printf("child proc : x = %d\n", x);
+	}
 	else
-		printf("parent prossec %d have a pid : %d\n",id, getpid());
-	if (id == 0){
+	{
 		sleep(2);
-		printf("child prossec %d have a pid : %d\n",id, getpid());
+		printf("parent proc  : x = %d\n", x);
 	}
 	// wait(NULL);
 	return (0);

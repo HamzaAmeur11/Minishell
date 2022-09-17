@@ -1,0 +1,17 @@
+hakdlbnldbj 
+[?2004hMinishel => hjgseivihjgfvuiggvsegfvsegsgkhgsevsgvgvjnsgvhksegivkhsegvigviskgvisegkegsvsmvkd fgvfvdfhgisdgskdghvksg
+[?2004l[?2004hMinishel => shgklshgkhsoghl;s
+[?2004l[?2004hMinishel => gdbghskj
+[?2004l[?2004hMinishel => ls
+[?2004l[?2004hMinishel => ls
+[?2004l[?2004hMinishel => ls
+[?2004l[?2004hMinishel => ls
+[?2004l[?2004hMinishel => ls
+[?2004l[?2004hMinishel => ls
+[?2004l[?2004hMinishel => pwd
+[?2004l/home/hmeur/Documents/Minishell/execution
+[?2004hMinishel => pwd
+[?2004l/home/hmeur/Documents/Minishell/execution
+[?2004hMinishel => cat file,[K.txt
+[?2004l[?2004hMinishel => cat file.txt
+[?2004l[?2004hMinishel => ^C[?2004l

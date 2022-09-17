@@ -3,66 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/27 14:58:17 by hameur            #+#    #+#             */
-/*   Updated: 2022/08/31 00:14:29 by hameur           ###   ########.fr       */
+/*   Created: 2022/09/12 16:48:06 by hmeur             #+#    #+#             */
+/*   Updated: 2022/09/12 18:17:20 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-char	*ft_strdup(char *s1)
+t_envi *new_node(char *env_x)
 {
-	char	*p;
-	int		i;
+	t_envi *node;
 
-	i = ft_strlen(s1);
-	p = (char *)malloc(i + 1);
-	if (!p)
+	node = (t_envi *)malloc(sizeof(t_envi));
+	if (!node)
 		return (NULL);
-	i = -1;
-	while (s1[++i] != 0)
-		p[i] = s1[i];
-	p[i] = 0;
-	return (p);
+	node->env_x = env_x;
+	node->var_name = name_var(env_x);
+	node->var_value = value_var(env_x);
+	node->next = NULL;
+	return (node);
 }
 
-int ft_strlen(char *str)
+void add_back(t_envi **envi, t_envi *new_node)
 {
-	int i = -1;
-		while (str[++i] != 0)
-			;
-	return (i);
-}
-char *ft_strlcat(char *s1, char *s2)
-{
-	int i;
-	int	j;
-	char *str;
-	 
-	j = -1;
-	i = ft_strlen(s1);
-	i += ft_strlen(s2);
-	str = (char*)malloc(i + 1);
-	if (!str)
-		return (NULL);
-	i = -1;
-	while (s1[++i] != 0)
-		str[i] = s1[i];
-	while (s2[++j] != 0)
-		str[i++] = s2[j];
-	return (str);
+	t_envi *temp;
+	
+	temp = *envi;
+	if (temp == NULL)
+	{
+		*envi = new_node;
+		return ;
+	}
+	while (temp->next != NULL)
+		temp = temp->next;
+	temp->next = new_node;
+	new_node->next = NULL;
 }
 
-int	ft_strncmp(char *s1, char *s2, int i)
+void add_front(t_envi **envi, t_envi *new_node)
 {
-	int	x;
-
-	x = 0;
-	while (s1[x] != 0 && s2[x] != 0 && s1[x] == s2[x] && i > x)
-		x++;
-	if (s1[x] == s2[x] && i == x)
-		return (0);
-	return (s1[x] - s2[x]);
+	if (*envi == NULL)
+	{
+		*envi = new_node;
+		return ;
+	}
+	new_node->next = *envi;
+	*envi = new_node;
 }
+
+int	size_envi(t_envi *env)
+{
+	t_envi *temp = env;
+	int i = 0;
+
+	while (temp != NULL && i++ >= 0)
+		temp = temp->next;
+	return(i);
+}
+
+void add_place(t_envi **envi, t_envi *new_node, int i)
+{
+	t_envi *temp = *envi;
+	int size = size_envi(*envi);
+	temp = *envi; 
+	while (temp->next->next != NULL && i < size)
+		temp = temp->next;
+	new_node->next = temp->next;
+	temp->next = new_node;
+}
+
+void delete_node_env(t_envi **env, int i)
+{
+	t_envi *temp = *env;
+	while (temp != NULL && i-- > 1)
+		temp = temp->next;
+	if (temp == NULL)
+		return ;
+	t_envi *ptr = temp->next;
+	temp->next = ptr->next;
+	free(ptr);
+}
+
+
