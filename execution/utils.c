@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 14:58:17 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/20 21:47:36 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/21 17:37:17 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,15 @@ int	ft_strncmp(char *s1, char *s2, int i)
 	if (s1[x] == s2[x] && i == x)
 		return (0);
 	return (s1[x] - s2[x]);
+}
+
+
+
+int	ft_putstr_fd(int fd, char *str)
+{
+	int i = -1;
+
+	while (str[++i] != 0)
+		write(fd, &str[i], 1);
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/16 23:50:29 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/21 18:34:08 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int check_type(char *str)
     else if (str[0] == '>' && str[1] == '>' && str[2] == 0)
         return (DR_OUT);
     else if (str[0] == '<' && str[1] == '<' && str[2] == 0)
-        return (DR_OUT);
+        return (DR_INP);
     return (FAILDE);
 }
 

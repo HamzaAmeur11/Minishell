@@ -6,13 +6,13 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/20 20:44:41 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/21 19:51:40 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHEL
+#ifndef MINISHELL
 
-#define MINISHEL
+#define MINISHELL
 
 #include <unistd.h>
 #include <stdio.h>
@@ -21,9 +21,10 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "headers/env.h"
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 # define SUCCESS 0
 # define FAILDE 1
@@ -67,6 +68,7 @@ typedef struct t_cmnd
 
 
 int		ft_strlen(char *str);
+int		ft_putstr_fd(int fd, char *str);
 char	*ft_strdup(char *s1);
 char	**ft_split(char *s, char c);
 char	*ft_strlcat(char *s1, char *s2);
@@ -78,7 +80,7 @@ int 	execute_cmnd(char **cmnd, t_envi **env);
 
 int		builtin_fct(t_cmnd *cmnd, t_envi **env);
 
-void ft_free(char **str);
+void	ft_free(char **str);
 
 void	ft_pwd(t_cmnd *cmnd, t_envi **env);
 void	ft_exit(t_cmnd *cmnd, t_envi **env);
@@ -90,10 +92,21 @@ void	ft_unset(t_cmnd *cmnd, t_envi **env);
 
 
 void	free_list(t_list **root, t_list *node);
-int init_list(t_list **head, char *str);
+int		init_list(t_list **head, char *str);
+
+//___________redirection_fcts______________
+int		redirection_out(char *file_name, int red_type);
+int		redirection_inp(char *file_name, int red_type);
+char	*name_red(t_list *cmnd_list);
+void	heredoc(char *file_name);
+int		type_red(t_list *cmnd);
 
 
-int redirection_out(char *file_name, int red_type);
-int redirection_inp(char *file_name, int red_type);
 
-#endif
+
+t_cmnd	*initializ_cmnd(t_global *global);
+char	**init_env_table(t_envi *envi, int size);
+char	**init_cmnd_table(t_list *cmnd, int size);
+
+
+#endif	//MINISHELL
