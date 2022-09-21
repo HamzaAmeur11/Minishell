@@ -66,9 +66,9 @@ int redirection_inp(char *file_name, int red_type)
 {
 	int	fd;
 
-	if (red_type == DR_INP)
+	/*if (red_type == DR_INP)
 		fd = heredoc();
-	else if (red_type == R_INP)
+	else */if (red_type == R_INP)
 		fd = open(file_name, O_RDONLY);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
