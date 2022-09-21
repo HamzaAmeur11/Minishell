@@ -6,29 +6,39 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/14 20:44:36 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/20 21:50:25 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
 
-int builtin_fct(char **cmnd, t_envi **env)
+
+void check_cmnnd(t_cmnd *cmnd)
 {
-	if (ft_strncmp(cmnd[0] , (char *)"cd", 2) == SUCCESS)
+	int i = -1;
+	while (cmnd->cmnd[++i] != NULL)
+		printf("%s\n", cmnd->cmnd[i]);
+}
+
+
+int builtin_fct(t_cmnd *cmnd, t_envi **env)
+{
+	if (ft_strncmp(cmnd->cmnd[0] , (char *)"cd", 2) == SUCCESS)
 		return(ft_cd(cmnd, env), SUCCESS);
-	if (ft_strncmp(cmnd[0] , (char *)"pwd", 3) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] , (char *)"pwd", 3) == SUCCESS)
 		return(ft_pwd(cmnd, env), SUCCESS);
-	if (ft_strncmp(cmnd[0] , (char *)"env", 3) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] , (char *)"env", 3) == SUCCESS)
 		return(ft_env(cmnd, env), SUCCESS);
-	if (ft_strncmp(cmnd[0] , (char *)"echo", 4) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] , (char *)"echo", 4) == SUCCESS)
 		return(ft_echo(cmnd, env), SUCCESS);
-	if (ft_strncmp(cmnd[0] , (char *)"exit", 4) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] , (char *)"exit", 4) == SUCCESS)
 		return (ft_exit(cmnd, env), SUCCESS);
-	 if (ft_strncmp(cmnd[0] , (char *)"unset", 5) == SUCCESS)
+	 if (ft_strncmp(cmnd->cmnd[0] , (char *)"unset", 5) == SUCCESS)
 	 	return(ft_unset(cmnd, env), SUCCESS);
-	 if (ft_strncmp(cmnd[0] , (char *)"export", 6) == SUCCESS)
+	 if (ft_strncmp(cmnd->cmnd[0] , (char *)"export", 6) == SUCCESS)
 	 	return(ft_export(cmnd, env), SUCCESS);
+	check_cmnnd(cmnd);	
 	return (FAILDE);
 }
 
@@ -63,17 +73,20 @@ char **find_paths(t_envi **env)
 }
 
 
-int other_fct(char **cmnd, t_envi **env)
+
+int other_fct(t_cmnd *cmnd, t_envi **env)
 {
 	char **paths = find_paths(env);
 	char *path_cmnd;
 	int i = 0;
+	int j;
 	while (paths[i] != NULL)
 	{
-		path_cmnd = ft_strlcat(paths[i++], ft_strlcat((char *)"/", cmnd[0]));
+		path_cmnd = ft_strlcat(paths[i++], ft_strlcat((char *)"/", cmnd->cmnd[0]));
 		if (access(path_cmnd, F_OK) == SUCCESS)
 		{
-			if (execve(path_cmnd, cmnd, (*env)->env) < 0)
+			j = execve(path_cmnd, cmnd->cmnd, cmnd->env);
+			if (j < 0)
 				return(printf("error f execve\n"), ft_free(paths), FAILDE);
 			return (ft_free(paths), SUCCESS);
 		}

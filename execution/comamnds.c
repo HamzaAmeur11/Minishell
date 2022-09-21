@@ -1,11 +1,11 @@
 #include "mini.h"
 
-void	ft_pwd(char **cmnd, t_envi **env)
+void	ft_pwd(t_cmnd *cmnd, t_envi **env)
 {
 	printf("%s\n", getcwd(NULL, 0));
 }
 
-void ft_env(char **cmnd, t_envi **env)
+void ft_env(t_cmnd *cmnd, t_envi **env)
 {
 	t_envi *temp = *env;
 
@@ -38,40 +38,40 @@ char *cherch_var(char *var, t_envi *env)
 	return (NULL);
 }
 
-void ft_echo(char **cmnd, t_envi **env)
+void ft_echo(t_cmnd *cmnd, t_envi **env)
 {
 	int i = 0;
 	char *var;
 	//check_using_echo without flage
-	while (cmnd[++i] != NULL)
+	while (cmnd->cmnd[++i] != NULL)
 	{
 		/*_______check variables________*/
-		if (print_var(cmnd[i]) == SUCCESS)
-			printf("%s ", cherch_var(cmnd[i] + 1, *env));
+		if (print_var(cmnd->cmnd[i]) == SUCCESS)
+			printf("%s ", cherch_var(cmnd->cmnd[i] + 1, *env));
 		else
-			printf("%s ", cmnd[i]);
+			printf("%s ", cmnd->cmnd[i]);
 	}
 	printf("\n");
-	ft_free(cmnd);
+	//ft_free(cmnd);
 }
 
-void ft_exit(char **cmnd, t_envi **env)
+void ft_exit(t_cmnd *cmnd, t_envi **env)
 {
-	ft_free(cmnd);
+	//ft_free(cmnd);
 	printf("exit\n");
 	//check_exit_value//
 	exit(1);
 }
 
-void	ft_cd(char **cmnd, t_envi **env)
+void	ft_cd(t_cmnd *cmnd, t_envi **env)
 {
 	//check_using cd without flage
-	if (chdir(cmnd[1]) != 0)
+	if (chdir(cmnd->cmnd[1]) != 0)
 	{
-		printf("cd: no such file or directory: %s\n", cmnd[1]);
-		ft_free(cmnd);
+		printf("cd: no such file or directory: %s\n", cmnd->cmnd[1]);
+		//ft_free(cmnd->cmnd);
 	}
-	ft_free(cmnd);
+	//ft_free(cmnd);
 }
 
 int check_var(char *cmnd)
@@ -84,22 +84,22 @@ int check_var(char *cmnd)
 	return (SUCCESS);
 }
 
-void ft_export(char **cmnd, t_envi **env)
+void ft_export(t_cmnd *cmnd, t_envi **env)
 {
 	int i = size_envi(*env);
-	if (check_var(cmnd[1]) != SUCCESS)
+	if (check_var(cmnd->cmnd[1]) != SUCCESS)
 		return ;
-	add_place(env, new_node(cmnd[1]), i - 1);
+	add_place(env, new_node(cmnd->cmnd[1]), i - 1);
 }
 
 
-void ft_unset(char **cmnd, t_envi **env)
+void ft_unset(t_cmnd *cmnd, t_envi **env)
 {
 	t_envi *temp = *env;
 	int i = 0;
 	while (temp != NULL && i++ >= 0)
 	{
-		if (ft_strncmp(temp->env_x, cmnd[1], ft_strlen(cmnd[1] - 1)) == SUCCESS)
+		if (ft_strncmp(temp->env_x, cmnd->cmnd[1], ft_strlen(cmnd->cmnd[1] - 1)) == SUCCESS)
 		{
 			delete_node_env(env, i - 1);
 			break ;

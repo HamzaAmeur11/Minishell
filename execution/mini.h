@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/16 23:48:02 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/20 20:44:41 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,23 +73,27 @@ char	*ft_strlcat(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int i);
 char	**find_paths(t_envi **env);
 char	*remove_debut(char* s, int i);
-int		other_fct(char **cmnd, t_envi **env);
+int		other_fct(t_cmnd *cmnd, t_envi **env);
 int 	execute_cmnd(char **cmnd, t_envi **env);
 
-int		builtin_fct(char **cmnd, t_envi **env);
+int		builtin_fct(t_cmnd *cmnd, t_envi **env);
 
 void ft_free(char **str);
 
-void	ft_pwd(char **cmnd, t_envi **env);
-void	ft_exit(char **cmnd, t_envi **env);
-void	ft_cd(char **cmnd, t_envi **env);
-void 	ft_echo(char **cmnd, t_envi **env);
-void	ft_env(char **cmnd, t_envi **env);
-void	ft_export(char **cmnd, t_envi **env);
-void	ft_unset(char **cmnd, t_envi **env);
+void	ft_pwd(t_cmnd *cmnd, t_envi **env);
+void	ft_exit(t_cmnd *cmnd, t_envi **env);
+void	ft_cd(t_cmnd *cmnd, t_envi **env);
+void 	ft_echo(t_cmnd *cmnd, t_envi **env);
+void	ft_env(t_cmnd *cmnd, t_envi **env);
+void	ft_export(t_cmnd *cmnd, t_envi **env);
+void	ft_unset(t_cmnd *cmnd, t_envi **env);
 
 
 void	free_list(t_list **root, t_list *node);
 int init_list(t_list **head, char *str);
+
+
+int redirection_out(char *file_name, int red_type);
+int redirection_inp(char *file_name, int red_type);
 
 #endif

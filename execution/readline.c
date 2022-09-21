@@ -62,20 +62,37 @@ t_cmnd *initializ_cmnd(t_global *global)
 
 }
 
-void redirection(char *file_name, int red_type)
+int redirection_inp(char *file_name, int red_type)
+{
+	int	fd;
+
+	if (red_type == DR_INP)
+		fd = heredoc();
+	else if (red_type == R_INP)
+		fd = open(file_name, O_RDONLY);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	return (SUCCESS);
+}
+
+int redirection_out(char *file_name, int red_type)
 {
 	int flags;
 	int fd;
 
 	if (red_type == R_OUT)
-		flags = O_CREAT | O_RDWR | O_TRUNC;
+	{
+		flags = O_CREAT | O_RDWR;
+		unlink(file_name);
+	}
 	else if (red_type == DR_OUT)
 		flags = O_CREAT | O_RDWR | O_APPEND;
-	//ba9i inp & d_inp
 	fd = open(file_name, flags, 0664);
-	dup2(fd, STDOUT_FILENO);
+	if (fd < 0 || dup2(fd, STDOUT_FILENO))
+		return (FAILDE);
+	//close(STDOUT_FILENO);
 	close(fd);
-	close(STDOUT_FILENO);
+	return (SUCCESS);
 }
 
 char *name_red(t_list *cmnd_list)
@@ -87,26 +104,47 @@ char *name_red(t_list *cmnd_list)
 	return (temp->next->str);
 }
 
+
+void closing_fds(int type, int fd)
+{
+	if (type > WORD)
+	{
+		if (close(fd) != 0)
+			write(2, "closing error\n", 15);
+		/*if (close(STDOUT_FILENO) != 0)
+			write(2, "clooosing error\n", 17);*/
+
+	}
+}
+
+
+
+
 int	exec_cmnd(t_global *global)
 {
 	t_cmnd *cmnd;
 	char	*red;
-	int		red_type;
+	int		red_type = 0;
 	int		pid = fork();
 	if (pid == 0)
 	{
 		cmnd = initializ_cmnd(global);
 		red_type = type_red(global->cmnd_list);
-		if (red_type > WORD)
-			redirection(name_red(global->cmnd_list), red_type);
-		if (builtin_fct(cmnd->cmnd, &global->env) != SUCCESS)
+		if (red_type == R_OUT || red_type == DR_OUT)
+			redirection_out(name_red(global->cmnd_list), red_type);
+		else if (red_type == R_INP || red_type == DR_INP)
+			redirection_inp(name_red(global->cmnd_list), red_type);
+		if (builtin_fct(cmnd, &global->env) != SUCCESS)
 		{
-			if (other_fct(cmnd->cmnd, &global->env) != SUCCESS)
-				return (write(2 ,"error\n", 6), FAILDE);
+			if (other_fct(cmnd, &global->env) != SUCCESS)
+				return (write(2 ,"error\n", 6), exit(1), FAILDE);//exit bwhd int
 		}
+		close(STDOUT_FILENO);
+		exit(0);
 	}
 	else
 		wait(NULL);
+	return (0);
 }
 
 
@@ -125,14 +163,11 @@ int ff(t_global *global)
 			continue ;
 		init_list(&global->cmnd_list, line);
 		exec_cmnd(global);
-		//free(line);
-		//free_list(global->cmnd_list);
+		//fee(line);
+		//free_list(global->cmnd_list);i
 	}
 	return (SUCCESS);
 }
-
-//builtin_fct (char **cmnd, t_env *env)
-//other_fct (char **cmnd, t_envi *env)
 
 int main(int ac, char **av, char **env)
 {
@@ -145,39 +180,3 @@ int main(int ac, char **av, char **env)
 	ff(global);
 	return (SUCCESS);
 }
-
-
-
-/*int ff(t_global global)
-{
-	
-	char *line;
-	char **cmnd;
-	int id = 1;
-	while(1)
-	{
-		line = readline("Minishel => ");
-		int j = ft_strlen(line);
-		if (j != 0)
-			add_history(line);
-		if (j == 0)
-			continue ;
-		cmnd = ft_split(line, ' ');
-		int i = builtin_fct(cmnd, global.env);
-		if (id > 0 && i != SUCCESS)
-			id = fork();
-		if (id == 0)
-		{
-			if (other_fct(cmnd, global.env) != SUCCESS)
-				return(printf("eroor f execution\n"), ft_free(cmnd), FAILDE);
-			ft_free(cmnd);
-		}
-		if(id > 0 && i != SUCCESS)
-		{
-			wait(NULL);
-			ft_free(cmnd);
-		}
-
-	}
-	return (SUCCESS);
-}*/

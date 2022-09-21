@@ -1,0 +1,34 @@
+ls
+-la
+total 80
+drwxrwxr-x 3 hmeur hmeur  4096 شتنبر  20 23:43 .
+drwxrwxr-x 6 hmeur hmeur  4096 شتنبر   2 23:50 ..
+-rwxrwxr-x 1 hmeur hmeur 27000 شتنبر  20 23:43 a.out
+-rw-rw-r-- 1 hmeur hmeur  1879 شتنبر  17 19:41 comamnds.c
+-rw-rw-r-- 1 hmeur hmeur  2155 شتنبر  12 18:17 env.c
+-rw-rw-r-- 1 hmeur hmeur  1636 شتنبر  12 18:19 env_utils.c
+-rw-rw-r-- 1 hmeur hmeur  2869 شتنبر  20 21:50 exec_cmnds.c
+-rw-rw-r-- 1 hmeur hmeur  2499 شتنبر   4 19:46 ft_split.c
+drwxrwxr-x 2 hmeur hmeur  4096 شتنبر  12 16:31 headers
+-rw-rw-r-- 1 hmeur hmeur     7 شتنبر  20 23:43 hhhh.txt
+-rw-rw-r-- 1 hmeur hmeur  2498 شتنبر  20 20:44 mini.h
+-rw-rw-r-- 1 hmeur hmeur  3381 شتنبر  20 23:43 readline.c
+-rw-rw-r-- 1 hmeur hmeur  2710 شتنبر  16 23:50 t_list.c
+-rw-rw-r-- 1 hmeur hmeur  1785 شتنبر  20 21:47 utils.c
+ls
+-la
+total 80
+drwxrwxr-x 3 hmeur hmeur  4096 شتنبر  20 23:43 .
+drwxrwxr-x 6 hmeur hmeur  4096 شتنبر   2 23:50 ..
+-rwxrwxr-x 1 hmeur hmeur 27000 شتنبر  20 23:43 a.out
+-rw-rw-r-- 1 hmeur hmeur  1879 شتنبر  17 19:41 comamnds.c
+-rw-rw-r-- 1 hmeur hmeur  2155 شتنبر  12 18:17 env.c
+-rw-rw-r-- 1 hmeur hmeur  1636 شتنبر  12 18:19 env_utils.c
+-rw-rw-r-- 1 hmeur hmeur  2869 شتنبر  20 21:50 exec_cmnds.c
+-rw-rw-r-- 1 hmeur hmeur  2499 شتنبر   4 19:46 ft_split.c
+drwxrwxr-x 2 hmeur hmeur  4096 شتنبر  12 16:31 headers
+-rw-rw-r-- 1 hmeur hmeur   867 شتنبر  20 23:43 hhhh.txt
+-rw-rw-r-- 1 hmeur hmeur  2498 شتنبر  20 20:44 mini.h
+-rw-rw-r-- 1 hmeur hmeur  3381 شتنبر  20 23:43 readline.c
+-rw-rw-r-- 1 hmeur hmeur  2710 شتنبر  16 23:50 t_list.c
+-rw-rw-r-- 1 hmeur hmeur  1785 شتنبر  20 21:47 utils.c
