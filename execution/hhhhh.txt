@@ -1,0 +1,61 @@
+int ft_pipes_utils(int *old_fd, int *fd, t_list *right)
+{
+	if (old_fd != NULL)
+	{
+		if (dup2(old_fd[0], STDIN_FILENO)  != SUCCESS)
+			return (FAILDE);
+		if (close(old_fd[0]) != SUCCESS)
+			return (FAILDE);
+		if (close(old_fd[1]) != FAILDE)
+			return (FAILDE);
+	}
+	if (right != NULL)
+	{
+		if (dup2(fd[1], STDOUT_FILENO) != SUCCESS)
+			return (FAILDE);
+		if (close(fd[0]) != SUCCESS)
+			return (FAILDE);
+		if (close(fd[1]) != SUCCESS)
+			return (FAILDE);
+	}
+	return (SUCCESS);
+}
+
+
+
+
+int ft_pipes(t_global *global, int pipe_num, int *old_fd)
+{
+	t_list *left_cmnd = NULL;
+	t_list *right_cmnd = NULL;
+
+	init_parties(global, &left_cmnd, &right_cmnd, pipe_num);
+	int	fd[2];
+	if (pipe(fd) < 0)
+		return (FAILDE);
+	int	pid = fork();
+	if (pid < 0)
+		return (FAILDE);
+	if (pid == 0)
+	{
+		if (ft_pipes_utils(old_fd, fd, right_cmnd) != SUCCESS)
+			return (FAILDE);
+		if (exec_cmnd(left_cmnd, global->env) != SUCCESS)
+			return (FAILDE);
+	}
+	if (pid > 0)
+	{
+		if (old_fd != NULL)
+		{
+			close(old_fd[0]);
+			close(old_fd[1]);
+		}
+		wait(NULL);
+		unlink(".heredoc");
+		if (right_cmnd != NULL)
+			ft_pipes(global, --pipe_num, fd);
+		else
+			return (SUCCESS);
+	}
+}
+

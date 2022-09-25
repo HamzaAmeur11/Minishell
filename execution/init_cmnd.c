@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:48:42 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/21 19:50:44 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/24 21:57:25 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,19 @@ char **init_env_table(t_envi *envi, int size)
 }
 
 
-t_cmnd *initializ_cmnd(t_global *global)
+t_cmnd *initializ_cmnd(t_list *cmnd_list, t_envi *env)
 {
 	t_cmnd *cmnd;
-	t_list *temp = global->cmnd_list;
+	t_list *temp = cmnd_list;
 	int i = 0;
 	cmnd = (t_cmnd *)malloc(sizeof(t_cmnd));
-	
-	if (temp->type != WORD)
+
+	if (temp->type != WORD && temp->type != PIPE)
 		temp = temp->next->next;
 	while (temp != NULL && temp->type == WORD && i++ > -1)
 		temp = temp->next;
-	cmnd->cmnd = init_cmnd_table(global->cmnd_list, i + 1);
-	cmnd->env = init_env_table(global->env, size_envi(global->env) + 1);
+	cmnd->cmnd = init_cmnd_table(cmnd_list, i + 1);
+	cmnd->env = init_env_table(env, size_envi(env) + 1);
 	return (cmnd);
 
 }

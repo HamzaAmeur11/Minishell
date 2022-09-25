@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/21 18:34:08 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/25 02:06:31 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int init_list(t_list **head, char *str)
     while (cmnd[i] != NULL)
     {
         if (add_back_list(head, new_list(cmnd[i++])) != SUCCESS)
-            return (FAILDE);//free 
+            return (FAILDE);//free
     }
     ft_free(cmnd);
     return (SUCCESS);

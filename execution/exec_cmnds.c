@@ -6,20 +6,11 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/20 21:50:25 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/25 02:37:42 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
-
-
-
-void check_cmnnd(t_cmnd *cmnd)
-{
-	int i = -1;
-	while (cmnd->cmnd[++i] != NULL)
-		printf("%s\n", cmnd->cmnd[i]);
-}
 
 
 int builtin_fct(t_cmnd *cmnd, t_envi **env)
@@ -38,7 +29,6 @@ int builtin_fct(t_cmnd *cmnd, t_envi **env)
 	 	return(ft_unset(cmnd, env), SUCCESS);
 	 if (ft_strncmp(cmnd->cmnd[0] , (char *)"export", 6) == SUCCESS)
 	 	return(ft_export(cmnd, env), SUCCESS);
-	check_cmnnd(cmnd);	
 	return (FAILDE);
 }
 
@@ -46,7 +36,7 @@ char *remove_debut(char* s, int i)
 {
 	int j = 0;
 	char *str;
-	
+
 	str = (char *)malloc(ft_strlen(s) - i + 1);
 	while (s[i] != 0)
 		str[j++] = s[i++];

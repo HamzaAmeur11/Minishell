@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/08/30 21:14:52 by hameur           ###   ########.fr       */
+/*   Updated: 2022/09/24 22:35:21 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-static int	nbr_mots(char const *s, char c)
+int	nbr_mots	(char const *s, char c)
 {
 	int	i;
 	int	nbr_mots;
@@ -103,8 +103,7 @@ char	**ft_split(char *s, char c)
 		copy = (char **)malloc (sizeof (char *) * 1);
 		if (!copy)
 			return (NULL);
-		copy[0] = NULL;
-		return (copy);
+		return (copy[0] = NULL, copy);
 	}
 	copy = (char **)malloc(sizeof(char *) * (nbr_mots(s, c) + 1));
 	if (!copy)

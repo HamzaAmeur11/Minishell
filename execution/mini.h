@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/21 19:51:40 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/25 01:26:01 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "headers/env.h"
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -41,7 +40,30 @@
 # define DR_OUT 18
 
 
+//_____________________ -Env-Fcts- _____________________//
 
+typedef struct t_envi
+{
+	char	**env;
+	char	*env_x;
+	char	*var_name;
+	char	*var_value;
+	struct t_envi	*next;
+}	t_envi;
+
+void    free_env(t_envi **env);
+void	add_back(t_envi **envi, t_envi *new_node);
+t_envi	*new_node(char *env_x);
+t_envi	*init_envi(char **env);
+void	add_place(t_envi **envi, t_envi *new_node, int i);
+int		size_envi(t_envi *env);
+void	delete_node_env(t_envi **env, int i);
+char    *value_var(char *env);
+char    *name_var(char *env);
+void	add_front(t_envi **envi, t_envi *new_node);
+
+
+//-------------------------------------------------------//
 
 
 
@@ -49,7 +71,8 @@ typedef struct t_global
 {
 	struct t_envi	*env;
 	struct t_list	*cmnd_list;
-	
+	char			*cmnd;
+
 }	t_global;
 
 typedef struct t_list
@@ -73,10 +96,13 @@ char	*ft_strdup(char *s1);
 char	**ft_split(char *s, char c);
 char	*ft_strlcat(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int i);
+
+
+
 char	**find_paths(t_envi **env);
 char	*remove_debut(char* s, int i);
 int		other_fct(t_cmnd *cmnd, t_envi **env);
-int 	execute_cmnd(char **cmnd, t_envi **env);
+int		exec_cmnd(t_list *cmnd_list, t_envi *env);
 
 int		builtin_fct(t_cmnd *cmnd, t_envi **env);
 
@@ -104,9 +130,13 @@ int		type_red(t_list *cmnd);
 
 
 
-t_cmnd	*initializ_cmnd(t_global *global);
+t_cmnd	*initializ_cmnd(t_list *cmnd_list, t_envi *env);
 char	**init_env_table(t_envi *envi, int size);
 char	**init_cmnd_table(t_list *cmnd, int size);
 
+
+
+
+int	nbr_mots	(char const *s, char c);
 
 #endif	//MINISHELL
