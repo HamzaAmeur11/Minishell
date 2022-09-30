@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/25 02:37:42 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/30 13:21:59 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,23 @@ int other_fct(t_cmnd *cmnd, t_envi **env)
 	return (FAILDE);
 }
 
-void ft_error(int i, char **cmnd)
+
+int	exec_cmnd(t_list *cmnd_list, t_envi *env)
 {
-	(void)cmnd;
-	(void)i;
-	exit(1);
+	t_cmnd *cmnd;
+	int		red_type = 0;
+
+	cmnd = initializ_cmnd(cmnd_list, env);
+	red_type = type_red(cmnd_list);
+	if (red_type == R_OUT || red_type == DR_OUT)
+		redirection_out(name_red(cmnd_list), red_type);
+	else if (red_type == R_INP || red_type == DR_INP)
+		redirection_inp(name_red(cmnd_list), red_type);
+	if (builtin_fct(cmnd, &env) != SUCCESS)
+	{
+		if (other_fct(cmnd, &env) != SUCCESS)
+			return (write(2 ,"error\n", 6), exit(1), FAILDE);//exit bwhd int
+	}
+	return (exit(0), SUCCESS);
 }
 

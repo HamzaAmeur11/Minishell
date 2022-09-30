@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:47:10 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/12 18:19:15 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/29 01:22:37 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,16 @@ void    free_env(t_envi **env)
 		free(temp);
 		temp = *env;
 	}
+}
+
+void delete_node_env(t_envi **env, int i)
+{
+	t_envi *temp = *env;
+	while (temp != NULL && i-- > 1)
+		temp = temp->next;
+	if (temp == NULL)
+		return ;
+	t_envi *ptr = temp->next;
+	temp->next = ptr->next;
+	free(ptr);
 }

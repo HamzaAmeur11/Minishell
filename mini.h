@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/25 01:26:01 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/30 13:18:44 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <sys/wait.h>
 
 # define SUCCESS 0
-# define FAILDE 1
+# define FAILDE -1
 
 
 # define WORD 10
@@ -61,6 +61,8 @@ void	delete_node_env(t_envi **env, int i);
 char    *value_var(char *env);
 char    *name_var(char *env);
 void	add_front(t_envi **envi, t_envi *new_node);
+int change_var_value(t_envi *env,char *name, char *value);
+
 
 
 //-------------------------------------------------------//
@@ -72,6 +74,7 @@ typedef struct t_global
 	struct t_envi	*env;
 	struct t_list	*cmnd_list;
 	char			*cmnd;
+	int				status;
 
 }	t_global;
 
@@ -108,13 +111,13 @@ int		builtin_fct(t_cmnd *cmnd, t_envi **env);
 
 void	ft_free(char **str);
 
-void	ft_pwd(t_cmnd *cmnd, t_envi **env);
-void	ft_exit(t_cmnd *cmnd, t_envi **env);
-void	ft_cd(t_cmnd *cmnd, t_envi **env);
-void 	ft_echo(t_cmnd *cmnd, t_envi **env);
-void	ft_env(t_cmnd *cmnd, t_envi **env);
-void	ft_export(t_cmnd *cmnd, t_envi **env);
-void	ft_unset(t_cmnd *cmnd, t_envi **env);
+int		ft_pwd(t_cmnd *cmnd, t_envi **env);
+int		ft_exit(t_cmnd *cmnd, t_envi **env);
+int		ft_cd(t_cmnd *cmnd, t_envi **env);
+int		ft_echo(t_cmnd *cmnd, t_envi **env);
+int		ft_env(t_cmnd *cmnd, t_envi **env);
+int		ft_export(t_cmnd *cmnd, t_envi **env);
+int		ft_unset(t_cmnd *cmnd, t_envi **env);
 
 
 void	free_list(t_list **root, t_list *node);

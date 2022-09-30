@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:39:55 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/21 19:43:43 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/09/30 13:40:55 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	heredoc(char *file_name)
 int redirection_inp(char *file_name, int red_type)
 {
 	int	fd;
+	int	fd_cpy;
 
 	if (red_type == DR_INP)
 	{
@@ -50,16 +51,18 @@ int redirection_inp(char *file_name, int red_type)
 	}
 	if (red_type == R_INP)
 		fd = open(file_name, O_RDONLY);
-	if (fd < 0 || dup2(fd, STDIN_FILENO) < 0)
+	fd_cpy = dup(STDIN_FILENO);
+	if (fd_cpy < 0 || fd < 0 || dup2(fd, STDIN_FILENO) < 0)
 		return (FAILDE);
 	close(fd);
-	return (SUCCESS);
+	return (fd_cpy);
 }
 
 int redirection_out(char *file_name, int red_type)
 {
 	int flags;
 	int fd;
+	int fd_cpy;
 
 	if (red_type == R_OUT)
 	{
@@ -69,10 +72,11 @@ int redirection_out(char *file_name, int red_type)
 	else if (red_type == DR_OUT)
 		flags = O_CREAT | O_RDWR | O_APPEND;
 	fd = open(file_name, flags, 0664);
-	if (fd < 0 || dup2(fd, STDOUT_FILENO) < 0)
+	fd_cpy = dup(STDOUT_FILENO);
+	if (fd_cpy < 0||fd < 0 || dup2(fd, STDOUT_FILENO) < 0)
 		return (FAILDE);
 	close(fd);
-	return (SUCCESS);
+	return (fd_cpy);
 }
 
 char *name_red(t_list *cmnd_list)

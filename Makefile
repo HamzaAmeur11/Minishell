@@ -6,7 +6,7 @@
 #    By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 18:05:22 by hmeur             #+#    #+#              #
-#    Updated: 2022/09/21 19:52:06 by hmeur            ###   ########.fr        #
+#    Updated: 2022/09/28 20:38:01 by hmeur            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS := #-Wall -Werror -Wextra
 READLINE_FLAG := -lreadline
 
 SRC :=	readline.c \
-		comamnds.c \
+		commands.c \
 		env.c \
 		env_utils.c \
 		exec_cmnds.c \
@@ -31,14 +31,16 @@ SRC :=	readline.c \
 		t_list.c \
 		utils.c \
 		redirection.c\
-		init_cmnd.c
+		init_cmnd.c \
+		commands/cd.c \
+		commands/env_vars.c
 
 
 OBJS := $(SRC:.c=.o)
 
 all :	$(NAME)
 		@echo "Making Minishell"
-		
+
 $(NAME) :	$(OBJS)
 			@$(CC) $(CFLAGS) $(SRC) -o $(NAME) $(READLINE_FLAG)
 
