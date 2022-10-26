@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:48:42 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/24 21:57:25 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/24 16:42:38 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ t_cmnd *initializ_cmnd(t_list *cmnd_list, t_envi *env)
 	int i = 0;
 	cmnd = (t_cmnd *)malloc(sizeof(t_cmnd));
 
-	if (temp->type != WORD && temp->type != PIPE)
+	//hd l if li lt7t dyal red
+	if (temp != NULL && temp->type != WORD && temp->type != PIPE)
 		temp = temp->next->next;
 	while (temp != NULL && temp->type == WORD && i++ > -1)
 		temp = temp->next;

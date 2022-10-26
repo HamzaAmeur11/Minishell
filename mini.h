@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/30 13:18:44 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/24 18:40:55 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@
 # define SUCCESS 0
 # define FAILDE -1
 
+# define DQUOTE 34
+# define SQUOTE 39
 
 # define WORD 10
 # define PIPE 11
-# define DQUOTE 12
-# define SQUOTE 13
 # define VAR 14
 # define R_INP 15
 # define R_OUT 16
@@ -44,7 +44,6 @@
 
 typedef struct t_envi
 {
-	char	**env;
 	char	*env_x;
 	char	*var_name;
 	char	*var_value;
@@ -71,9 +70,9 @@ int change_var_value(t_envi *env,char *name, char *value);
 
 typedef struct t_global
 {
-	struct t_envi	*env;
-	struct t_list	*cmnd_list;
-	char			*cmnd;
+	struct t_envi	*env;  //v
+	struct t_list	*cmnd_list; //v
+	char			*cmnd; //v
 	int				status;
 
 }	t_global;
@@ -140,6 +139,6 @@ char	**init_cmnd_table(t_list *cmnd, int size);
 
 
 
-int	nbr_mots	(char const *s, char c);
+int	nbr_mots	(char *s, char c);
 
 #endif	//MINISHELL

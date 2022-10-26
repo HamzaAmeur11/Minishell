@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:36:27 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/30 13:17:21 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/25 11:47:19 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	ft_pwd(t_cmnd *cmnd, t_envi **env)
 {
+	(void *)cmnd;
+	(void *)env;
 	printf("%s\n", getcwd(NULL, 0));
 	return (SUCCESS);
 }
@@ -22,6 +24,7 @@ int ft_env(t_cmnd *cmnd, t_envi **env)
 {
 	t_envi *temp = *env;
 
+	(void *)cmnd;
 	while (temp != NULL)
 	{
 		printf("%s=%s\n", temp->var_name, temp->var_value);
@@ -55,7 +58,6 @@ char *cherch_var(char *var, t_envi *env)
 int ft_echo(t_cmnd *cmnd, t_envi **env)
 {
 	int i = 0;
-	char *var;
 	//check_using_echo without flage
 	while (cmnd->cmnd[++i] != NULL)
 	{
@@ -72,6 +74,9 @@ int ft_echo(t_cmnd *cmnd, t_envi **env)
 
 int ft_exit(t_cmnd *cmnd, t_envi **env)
 {
+	(void *)cmnd;
+	(void *)env;
+	//change exit
 	//ft_free(cmnd);
 	printf("exit\n");
 	//check_exit_value//

@@ -6,13 +6,25 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/24 22:35:21 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/26 02:02:29 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-int	nbr_mots	(char const *s, char c)
+int	next_q(char *s, int i, char c, int key)
+{
+	i++;
+	while (s[i] != 0 && s[i] != c)
+		i++;
+	if (s[i] == 0 && key == 0)
+		return(FAILDE);
+	if (key == 1 && s[i] == 0)
+		return (i);
+	return (i + 1);
+}
+
+int	nbr_mots	(char *s, char c)
 {
 	int	i;
 	int	nbr_mots;
@@ -23,7 +35,13 @@ int	nbr_mots	(char const *s, char c)
 		nbr_mots++;
 	while (s[i] != 0)
 	{
-		if (s[i] == c)
+		if (s[i] == DQUOTE || s[i] == SQUOTE)
+		{
+			i = next_q(s, i, s[i], 0);
+			if (i == FAILDE)
+				return (FAILDE);
+		}
+		else if (s[i] == c)
 		{
 			if (s[i + 1] != c && s[i + 1] != 0)
 			{
@@ -55,8 +73,13 @@ int find_char(char *str, int pos, char c, int id)
 {
 	while(str[pos] == c)
 		pos++;
-	while (str[pos] != c && str[pos] != 0)
-		pos++;
+	while (str[pos] != 0 && str[pos] != c)
+	{
+		if (str[pos] == DQUOTE || str[pos] == SQUOTE)
+			pos = next_q(str, pos, str[pos], 0);
+		else
+			pos++;
+	}
 	if (id == 2)
 	{
 		while (str[pos + 1] == c)
@@ -82,15 +105,20 @@ static char	**ft_remplissage(char *s, char **copy, char c)
 	while (end != 0)
 	{
 		copy[i++] = ft_copy(s, start, end);
-		end = find_char(s, end + 1, c, 0);
 		start = find_char(s, start, c, 2) + 1;
+		end = find_char(s, end + 1, c, 0);
 	}
-	end =  find_char(s, start + 1, c, 2);
+	end =  find_char(s, start, c, 2);
 	if ((size_t)start != strlen(s))
 		copy[i++] = ft_copy(s, start, end);
 	copy[i] = NULL;
 	return (copy);
 }
+
+//init split_pro_max(char *s)
+
+
+
 
 char	**ft_split(char *s, char c)
 {
@@ -110,3 +138,34 @@ char	**ft_split(char *s, char c)
 		return (NULL);
 	return (ft_remplissage(s, copy, c));
 }
+
+/*
+int main(int ac, char **av)
+{
+	int i;
+	char *str;
+	while (1)
+	{
+		str = readline("khedmi=>");
+		i = nbr_mots(str, ' ');
+		printf("%d\n", i);
+	}
+	return (SUCCESS);
+}
+*/
+
+int main(int ac, char **av)
+{
+	char **str;
+	int i;
+	while (1)
+	{
+		char *line = readline("zebi=>");
+		str = ft_split(line, ' ');
+		i = -1;
+		while (str[++i])
+			printf("%s\n", str[i]);
+		printf("\n");
+	}
+}
+

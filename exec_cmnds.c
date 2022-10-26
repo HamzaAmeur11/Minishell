@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/30 13:21:59 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/18 18:51:40 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,11 @@ int other_fct(t_cmnd *cmnd, t_envi **env)
 	int j;
 	while (paths[i] != NULL)
 	{
+
 		path_cmnd = ft_strlcat(paths[i++], ft_strlcat((char *)"/", cmnd->cmnd[0]));
 		if (access(path_cmnd, F_OK) == SUCCESS)
 		{
+			//absolut path : /bin/ls
 			j = execve(path_cmnd, cmnd->cmnd, cmnd->env);
 			if (j < 0)
 				return(printf("error f execve\n"), ft_free(paths), FAILDE);

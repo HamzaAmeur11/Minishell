@@ -113,6 +113,7 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 		else
 			return (SUCCESS);
 	}
+	return 0;
 }
 
 
@@ -134,10 +135,6 @@ int shell(t_global *global)
 		global->cmnd = line;
 		init_list(&global->cmnd_list, line);
 		n_cmnd = nbr_mots(global->cmnd, '|');
-		if (n_cmnd == 1)
-		{
-
-		}
 		ft_pipes(global, n_cmnd, NULL, 0);
 		free(line);
 	}
@@ -152,7 +149,7 @@ int main(int ac, char **av, char **env)
 
 	//env valide
 	(void)ac;(void)av;
-
+	//signals
 	shell(global);
 	return (SUCCESS);
 }
