@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/10/26 02:02:29 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/26 13:41:02 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,26 +142,12 @@ char	**ft_split(char *s, char c)
 /*
 int main(int ac, char **av)
 {
-	int i;
-	char *str;
-	while (1)
-	{
-		str = readline("khedmi=>");
-		i = nbr_mots(str, ' ');
-		printf("%d\n", i);
-	}
-	return (SUCCESS);
-}
-*/
-
-int main(int ac, char **av)
-{
 	char **str;
 	int i;
 	while (1)
 	{
 		char *line = readline("zebi=>");
-		str = ft_split(line, ' ');
+		str = ft_split(line, ':');
 		i = -1;
 		while (str[++i])
 			printf("%s\n", str[i]);
@@ -169,3 +155,4 @@ int main(int ac, char **av)
 	}
 }
 
+*/

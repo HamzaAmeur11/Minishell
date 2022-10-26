@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/25 02:06:31 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/26 13:52:57 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,24 @@ int add_back_list(t_list **head, t_list *new_node)
     return (SUCCESS);
 }
 
+char *change_str(char *str)
+{
+    
+}
+
 int init_list(t_list **head, char *str)
 {
     char    **cmnd;
+    char    *temp;
     int     i;
+
     cmnd = ft_split(str, ' ');
     i = 0;
     *head = NULL;
     while (cmnd[i] != NULL)
     {
-        if (add_back_list(head, new_list(cmnd[i++])) != SUCCESS)
+        temp = change_str(cmnd[i++]);
+        if (add_back_list(head, new_list(temp)) != SUCCESS)
             return (FAILDE);//free
     }
     ft_free(cmnd);
