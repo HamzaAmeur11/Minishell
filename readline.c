@@ -133,7 +133,7 @@ int shell(t_global *global)
 		if (j == 0)
 			continue ;
 		global->cmnd = line;
-		init_list(&global->cmnd_list, line);
+		init_list(global, line);
 		n_cmnd = nbr_mots(global->cmnd, '|');
 		ft_pipes(global, n_cmnd, NULL, 0);
 		free(line);

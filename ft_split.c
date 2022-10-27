@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/10/26 13:41:02 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/27 13:49:01 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ static char	**ft_remplissage(char *s, char **copy, char c)
 char	**ft_split(char *s, char c)
 {
 	char	**copy;
-
+	int		size;
 	if (!s)
 		return (NULL);
 	if (!*s)
@@ -133,7 +133,11 @@ char	**ft_split(char *s, char c)
 			return (NULL);
 		return (copy[0] = NULL, copy);
 	}
-	copy = (char **)malloc(sizeof(char *) * (nbr_mots(s, c) + 1));
+	size = nbr_mots(s, c);
+	if (size == FAILDE)
+		return (printf("error quots\n"), NULL);
+	printf("%d\n", size);
+	copy = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!copy)
 		return (NULL);
 	return (ft_remplissage(s, copy, c));
@@ -147,9 +151,9 @@ int main(int ac, char **av)
 	while (1)
 	{
 		char *line = readline("zebi=>");
-		str = ft_split(line, ':');
+		str = ft_split(line, '|');
 		i = -1;
-		while (str[++i])
+		while (str != NULL && str[++i])
 			printf("%s\n", str[i]);
 		printf("\n");
 	}
