@@ -6,7 +6,7 @@
 /*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/10/27 17:15:40 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/28 00:28:58 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,27 +89,28 @@ char *nume_var(char* str, int *id)
 	int i = 0;
 	int	j = (*id) + 1;
 	(*id)++;
-	while (str[*id] != 0 && str[*id] != ' ')
+	while (str[*id] != 0 && str[*id] != '$' && str[*id] != ' ' && str[*id] != DQUOTE)
 	{
 		i++;
 		(*id)++;
 	}
 	char *ret  = (char *)malloc(sizeof(char) * (i + 1));
 	i = 0;
-	while (str[j] != 0 && str[j] != ' ')
+	while (str[j] != 0 && str[j] != '$' && str[j] != ' ' && str[j] != DQUOTE)
 		ret[i++] = str[j++];
 	ret[i] = 0;
 	return(ret);
 }
+
 
 int fct2(t_envi *env, char *s, int *i)
 {
 	t_envi *temp = env;
 
 	char *var_name = nume_var(s, i);
+	printf("ini i = %d && var_name = %s\n", *i, var_name);
 	while (temp != NULL)
 	{
-		//printf("____ %s\n", temp->var_name);
 		if (ft_strncmp(var_name, temp->var_name, ft_strlen(env->var_name)) == SUCCESS)
 			return (free(var_name), ft_strlen(env->var_value));
 		temp = temp->next;
@@ -118,20 +119,23 @@ int fct2(t_envi *env, char *s, int *i)
 }
 
 
-
 int fct(t_envi *env, char *str, int *id, char c)
 {
 	int i = 0;
+	int j = (*id) + 1;
 
-	(*id)++;
-	while (str[(*id)] != 0 && str[(*id)] != c)
+	while (str[j] != 0 && str[j] != c)
 	{
-		if (str[(*id)] == '$' && c == DQUOTE)
-			i =+ fct2(env, str, id);
+		if (str[j] == '$' && c == DQUOTE)
+			i += fct2(env, str, &j);
 		else
+		{
 			i++;
-		(*id)++;
+			j++;
+		}
+		printf("len_str : /** %c **/ ret = %d\n", str[j], i);
 	}
+	(*id) = j;
 	return (i);
 }
 
@@ -143,23 +147,78 @@ int len_str(t_envi *env, char *str)
 	while (str[i] != 0)
 	{
 		if (str[i] == DQUOTE || str[i] == SQUOTE)
-			ret =+ fct(env, str, &i,  str[i]);
+			ret += fct(env, str, &i,  str[i]);
 		else if (str[i] == '$')
-			ret =+ fct2(env, str, &i);
+			ret += fct2(env, str, &i);
 		else
 			ret++;
-		printf("len_str : **%c** ret = %d\n", str[i], ret);
 		i++;
 	}
 	return (ret);
 }
 
+void	fct5(char *str, int **tab, char *s)
+{
+	int	i = 0;
+
+	while (s[i] != 0)
+		str[(*tab[1]++)] = s[i++];
+}
+
+void	fct4(t_envi *env, char *str, char *ret, int **tab)
+{
+	t_envi *temp = env;
+
+	char *var_name = nume_var(str, tab[0]);
+	while (temp != NULL)
+	{
+		if (ft_strncmp(var_name, temp->var_name, ft_strlen(env->var_name)) == SUCCESS)
+		{
+			fct5(ret, tab, temp->var_value);
+			free(var_name);
+		}
+		temp = temp->next;
+	}
+	free(var_name);
+}
+
+
+void	fct3(t_envi *env, char *str, char *ret, int **tab)
+{
+	int id = 0;
+	char c = str[(*tab[0])++];
+
+	while (str[(*tab[0])] != 0 && str[*tab[0]] != c)
+	{
+		if (str[(*tab[0])] == '$' && c == DQUOTE)
+			fct4(env, str, ret, tab);
+		else
+			ret[(*tab[1]++)] = str[(*tab[0]++)];
+	}
+	(*tab[0])++;
+}
 
 char *change_str(t_envi *env, char *str)
 {
 	char *ret;
+	int i = 0;
+	int j = 0;
+	int	**tab = (int **)malloc(sizeof(int *) * 2);
+	tab[0] = &i;
+	tab[1] = &j;
 
-
+	ret = (char *)malloc(sizeof(char) * (len_str(env, str) + 1));
+	while(str[i] != 0)
+	{
+		if(str[i] == SQUOTE || str[i] == DQUOTE)
+			fct3(env ,str, ret, tab);
+		else if (str[i] == '$')
+			fct4(env, str, ret, tab);
+		else
+			ret[j++] = str[i++];
+	}
+	free(tab);
+	return (ret);
 }
 
 int init_list(t_global *glb, char *str)
@@ -194,6 +253,6 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("zeeeeebi =>");
-		printf("len_str %d\n", len_str(glb->env, line));
+		printf("change_str  %s\n", change_str(glb->env, line));
 	}
 }
