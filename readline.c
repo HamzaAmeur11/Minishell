@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   readline.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
+/*   Updated: 2022/10/29 22:41:44 by megrisse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -5,16 +17,14 @@
 //protect all malloc in your minishell
 
 
-
-
-
 void init_parties(t_global *glb, t_list **left, t_list **right, int pipe_num)
 {
 	int total_pipes = nbr_mots(glb->cmnd, '|');
 	char **str = ft_split(glb->cmnd, '|');
-	init_list(left, str[total_pipes - pipe_num]);
+	int i = 0;
+	*left = init_list(glb, *left, str[total_pipes - pipe_num]);
 	if (str[total_pipes - pipe_num + 1] != NULL)
-		init_list(right, str[total_pipes - pipe_num + 1]);
+		*right = init_list(glb, *right, str[total_pipes - pipe_num + 1]);
 	else
 		right = NULL;
 	ft_free(str);
@@ -80,6 +90,7 @@ int exec_builting(t_list *cmnd_list, t_envi *env)
 	return (SUCCESS);
 }
 
+
 int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 {
 	t_list *left_cmnd = NULL;
@@ -87,7 +98,8 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 
 
 	init_parties(global, &left_cmnd, &right_cmnd, pipe_num);
-	if (key == 0 && right_cmnd == NULL && exec_builting(left_cmnd, global->env) == SUCCESS)
+	global->status = exec_builting(global->cmnd_list, global->env);
+	if (key == 0 && right_cmnd == NULL && global->status == SUCCESS)
 		return (SUCCESS);
 	int	fd[2];
 	if (pipe(fd) < 0)
@@ -107,18 +119,16 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 		close_fds(NULL, NULL, old_fd, 1);
 		wait(&global->status);
 		unlink(".heredoc");
-		//free left & right
 		if (right_cmnd != NULL)
 			ft_pipes(global, --pipe_num, fd, 1);
 		else
 			return (SUCCESS);
 	}
-	return 0;
+	free_list(&left_cmnd, left_cmnd);
+	if (right_cmnd != NULL)
+		free_list(&right_cmnd, right_cmnd);
+	return (0);
 }
-
-
-
-
 
 int shell(t_global *global)
 {
@@ -133,7 +143,7 @@ int shell(t_global *global)
 		if (j == 0)
 			continue ;
 		global->cmnd = line;
-		init_list(global, line);
+		global->cmnd_list = init_list(global, global->cmnd_list, line);
 		n_cmnd = nbr_mots(global->cmnd, '|');
 		ft_pipes(global, n_cmnd, NULL, 0);
 		free(line);

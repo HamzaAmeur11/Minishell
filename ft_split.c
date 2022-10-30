@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/10/27 13:49:01 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/28 21:18:20 by megrisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,11 @@ static char	**ft_remplissage(char *s, char **copy, char c)
 	if ((size_t)start != strlen(s))
 		copy[i++] = ft_copy(s, start, end);
 	copy[i] = NULL;
+	i = 0;
+	// while (copy[i] != 0)
+	// 	printf("copy = %s\n", copy[i++]);
 	return (copy);
 }
-
-//init split_pro_max(char *s)
-
-
-
 
 char	**ft_split(char *s, char c)
 {
@@ -136,7 +134,6 @@ char	**ft_split(char *s, char c)
 	size = nbr_mots(s, c);
 	if (size == FAILDE)
 		return (printf("error quots\n"), NULL);
-	printf("%d\n", size);
 	copy = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!copy)
 		return (NULL);

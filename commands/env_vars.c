@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 16:01:47 by hmeur             #+#    #+#             */
-/*   Updated: 2022/09/30 13:25:12 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/29 14:24:30 by megrisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-t_envi *find_var(t_envi *env, char *name)
+t_envi	*find_var(t_envi *env, char *name)
 {
 	t_envi	*temp;
 
@@ -26,9 +26,9 @@ t_envi *find_var(t_envi *env, char *name)
 	return (NULL);
 }
 
-int change_var_value(t_envi *env,char *name, char *value)
+int	change_var_value(t_envi *env, char *name, char *value)
 {
-	t_envi *temp;
+	t_envi	*temp;
 
 	temp = find_var(env, name);
 	if (temp == NULL)
@@ -39,9 +39,11 @@ int change_var_value(t_envi *env,char *name, char *value)
 	return (SUCCESS);
 }
 
-int check_var(char *cmnd)
+int	check_var(char *cmnd)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (cmnd[i] != 0 && cmnd[i] != '=')
 		i++;
 	if (cmnd[i] == 0)
@@ -49,14 +51,17 @@ int check_var(char *cmnd)
 	return (SUCCESS);
 }
 
-int ft_export(t_cmnd *cmnd, t_envi **env)
+int	ft_export(t_cmnd *cmnd, t_envi **env)
 {
 	int i = size_envi(*env);
+	char *name;
 	if (check_var(cmnd->cmnd[1]) != SUCCESS)
 		return (FAILDE);
 	if (find_var(*env, name_var(cmnd->cmnd[1])) != NULL)
 	{
-		change_var_value(*env, name_var(cmnd->cmnd[1]), value_var(cmnd->cmnd[1]));
+		name =  name_var(cmnd->cmnd[1]);
+		change_var_value(*env, name, value_var(cmnd->cmnd[1]));
+		free(name);
 		return (SUCCESS);
 	}
 	add_back(env, new_node(cmnd->cmnd[1]));

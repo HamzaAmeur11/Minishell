@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/10/27 14:17:49 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/10/29 21:36:02 by megrisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	delete_node_env(t_envi **env, int i);
 char    *value_var(char *env);
 char    *name_var(char *env);
 void	add_front(t_envi **envi, t_envi *new_node);
-int change_var_value(t_envi *env,char *name, char *value);
+int		change_var_value(t_envi *env,char *name, char *value);
 
 
 
@@ -98,6 +98,7 @@ char	*ft_strdup(char *s1);
 char	**ft_split(char *s, char c);
 char	*ft_strlcat(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int i);
+char	*ft_itoa(int nbr);
 
 
 
@@ -120,7 +121,7 @@ int		ft_unset(t_cmnd *cmnd, t_envi **env);
 
 
 void	free_list(t_list **root, t_list *node);
-int		init_list(t_global *glb, char *str);
+t_list	*init_list(t_global *glb, t_list *head, char *str);
 
 //___________redirection_fcts______________
 int		redirection_out(char *file_name, int red_type);
@@ -135,6 +136,10 @@ int		type_red(t_list *cmnd);
 t_cmnd	*initializ_cmnd(t_list *cmnd_list, t_envi *env);
 char	**init_env_table(t_envi *envi, int size);
 char	**init_cmnd_table(t_list *cmnd, int size);
+
+
+
+void print_l(t_list *head, char *str);
 
 
 
