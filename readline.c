@@ -6,7 +6,7 @@
 /*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/10/29 22:41:44 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/10/30 18:40:24 by megrisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ void init_parties(t_global *glb, t_list **left, t_list **right, int pipe_num)
 {
 	int total_pipes = nbr_mots(glb->cmnd, '|');
 	char **str = ft_split(glb->cmnd, '|');
+	if (str == NULL)
+		return ;
 	int i = 0;
 	*left = init_list(glb, *left, str[total_pipes - pipe_num]);
+
 	if (str[total_pipes - pipe_num + 1] != NULL)
 		*right = init_list(glb, *right, str[total_pipes - pipe_num + 1]);
 	else
@@ -98,6 +101,8 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 
 
 	init_parties(global, &left_cmnd, &right_cmnd, pipe_num);
+	if (left_cmnd == NULL)
+		return (1);
 	global->status = exec_builting(global->cmnd_list, global->env);
 	if (key == 0 && right_cmnd == NULL && global->status == SUCCESS)
 		return (SUCCESS);
@@ -118,6 +123,7 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	{
 		close_fds(NULL, NULL, old_fd, 1);
 		wait(&global->status);
+		
 		unlink(".heredoc");
 		if (right_cmnd != NULL)
 			ft_pipes(global, --pipe_num, fd, 1);
@@ -134,10 +140,14 @@ int shell(t_global *global)
 {
 	char *line;
 	int	n_cmnd;
-	while(1)
+	int j;
+	while(1337)
 	{
 		line = readline("Minishel => ");
-		int j = ft_strlen(line);
+		//fct for exit ctrl-D
+		if (line == NULL)
+			exit(global->status);
+		j = ft_strlen(line);
 		if (j != 0)
 			add_history(line);
 		if (j == 0)
@@ -159,7 +169,7 @@ int main(int ac, char **av, char **env)
 
 	//env valide
 	(void)ac;(void)av;
-	//signals
+	handler_sig(global);
 	shell(global);
 	return (SUCCESS);
 }
