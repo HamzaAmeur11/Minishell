@@ -6,13 +6,13 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/01 17:42:35 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 18:00:00 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL
+#ifndef MINISHELL_H
 
-#define MINISHELL
+#define MINISHELL_H
 
 #include <unistd.h>
 #include <stdio.h>
@@ -33,7 +33,6 @@
 
 # define WORD 10
 # define PIPE 11
-# define VAR 14
 # define R_INP 15
 # define R_OUT 16
 # define DR_INP 17
@@ -147,4 +146,4 @@ void print_l(t_list **head, char *str);
 
 int	nbr_mots	(char *s, char c);
 
-#endif	//MINISHELL
+#endif	//MINISHELL_H

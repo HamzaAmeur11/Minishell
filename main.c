@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   readline.c                                         :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/01 17:47:38 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 18:05:38 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,7 @@ int shell(t_global *global)
 		global->cmnd = line;
 		global->cmnd_list = init_list(global, global->cmnd_list, line);
 		if (global->cmnd_list == NULL)
-		{
-			write(2, "Error pipe\n", 11);
 			continue ;
-		}
 		print_l(&global->cmnd_list, "cmnd_list");
 		n_cmnd = nbr_mots(global->cmnd, '|');
 		global->status = ft_pipes(global, n_cmnd, NULL, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   t_list.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/10/31 22:10:19 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/01 18:11:41 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,18 @@ char *change_str(t_global *glb, char *str)
 	return (ret);
 }
 
+int check_list(t_list *list)
+{
+	t_list *temp = list;
+	while (temp != NULL)
+	{
+		if (temp->type != WORD && temp->type != PIPE && temp->next == NULL)
+		return (write(2, "syntax error near unexpected token `newline'\n", 45), FAILDE);
+		temp = temp->next;
+	}
+	return (SUCCESS);
+}
+
 t_list *init_list(t_global *glb, t_list *head,  char *str)
 {
     char	**cmnd;
@@ -244,10 +256,12 @@ t_list *init_list(t_global *glb, t_list *head,  char *str)
     {
         temp = change_str(glb, cmnd[i++]);
         if (add_back_list(&head, new_list(temp)) != SUCCESS)
-            return (free(temp), free_list(&head, head), NULL);//free
+            return (ft_free(cmnd), free(temp), free_list(&head, head), write(2, "Error pipe\n", 11), NULL);//free
 		free(temp);
     }
     ft_free(cmnd);
+	if (check_list(head) != SUCCESS)
+		return (free_list(&head, head), NULL);
     return (head);
 }
 
