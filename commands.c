@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:36:27 by hmeur             #+#    #+#             */
-/*   Updated: 2022/10/30 15:25:04 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/01 01:27:11 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,17 @@ int ft_echo(t_cmnd *cmnd, t_envi **env)
 	return (SUCCESS);
 }
 
-int ft_exit(t_cmnd *cmnd, t_envi **env)
+int ft_exit(t_global *glb, int key)
 {
-	(void)cmnd;
-	(void)env;
+	int i  = glb->status;
 	//change exit
+	free_env(&glb->env);
+	free_list(&glb->cmnd_list, glb->cmnd_list);
+	free(glb);
 	//ft_free(cmnd);
-	printf("exit\n");
+	if (key == 0)
+		printf("exit\n");
 	//check_exit_value//
-	exit(SUCCESS);
+	exit(i);
 }
 

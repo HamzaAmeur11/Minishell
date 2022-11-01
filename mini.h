@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/10/30 18:14:40 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/01 01:25:02 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,14 @@ char	*ft_itoa(int nbr);
 char	**find_paths(t_envi **env);
 char	*remove_debut(char* s, int i);
 int		other_fct(t_cmnd *cmnd, t_envi **env);
-int		exec_cmnd(t_list *cmnd_list, t_envi *env);
+int		exec_cmnd(t_list *cmnd_list, t_global *glb);
 
-int		builtin_fct(t_cmnd *cmnd, t_envi **env);
+int		builtin_fct(t_cmnd *cmnd, t_global *glb);
 
 void	ft_free(char **str);
-
+void 	free_tcmnd(t_cmnd *cmnd);
 int		ft_pwd(t_cmnd *cmnd, t_envi **env);
-int		ft_exit(t_cmnd *cmnd, t_envi **env);
+int		ft_exit(t_global *glb, int key);
 int		ft_cd(t_cmnd *cmnd, t_envi **env);
 int		ft_echo(t_cmnd *cmnd, t_envi **env);
 int		ft_env(t_cmnd *cmnd, t_envi **env);

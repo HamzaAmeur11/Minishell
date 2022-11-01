@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 18:05:22 by hmeur             #+#    #+#              #
-#    Updated: 2022/10/30 17:44:33 by megrisse         ###   ########.fr        #
+#    Updated: 2022/11/01 00:57:21 by hmeur            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ HEADER := mini.h
 
 CC := gcc
 
-CFLAGS += #-Wall -Werror -Wextra
+CFLAGS += -Wall -Werror -Wextra
 
 LDFLAGS += -lreadline
 
@@ -44,10 +44,10 @@ all :	$(NAME)
 		@echo "Making Minishell"
 
 $(NAME) :	$(OBJS)
-	$(CC)  $(LDFLAGS) $(OBJS) -o $(NAME) 
+	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)
 
 %.o : %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@ 
+	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS) -O0
 
 clean :
 	@rm -rf $(OBJS)

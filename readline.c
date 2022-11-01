@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/10/30 18:40:24 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/01 01:26:28 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void init_parties(t_global *glb, t_list **left, t_list **right, int pipe_num)
 	char **str = ft_split(glb->cmnd, '|');
 	if (str == NULL)
 		return ;
-	int i = 0;
 	*left = init_list(glb, *left, str[total_pipes - pipe_num]);
 
 	if (str[total_pipes - pipe_num + 1] != NULL)
@@ -64,7 +63,7 @@ int close_fds(t_list *right, int *fd, int *old_fd, int key)
 	return (SUCCESS);
 }
 
-int exec_builting(t_list *cmnd_list, t_envi *env)
+int exec_builting(t_list *cmnd_list, t_global *glb)
 {
 	t_cmnd	*cmnd;
 	int		red_type = 0;
@@ -72,7 +71,7 @@ int exec_builting(t_list *cmnd_list, t_envi *env)
 	int		red_back = -1;
 	int		i = 0;
 
-	cmnd = initializ_cmnd(cmnd_list, env);
+	cmnd = initializ_cmnd(cmnd_list, glb->env);
 	red_type = type_red(cmnd_list);
 	if (red_type == R_OUT || red_type == DR_OUT)
 	{
@@ -84,10 +83,11 @@ int exec_builting(t_list *cmnd_list, t_envi *env)
 		old_fd = redirection_inp(name_red(cmnd_list), red_type);
 		red_back = STDIN_FILENO;
 	}
-	if (builtin_fct(cmnd, &env) != SUCCESS)
+	if (builtin_fct(cmnd, glb) != SUCCESS)
 		i = -1;
 	if (red_type != 0)
 		dup2(old_fd, red_back);
+	free_tcmnd(cmnd);
 	if (i == -1)
 		return (FAILDE);
 	return (SUCCESS);
@@ -103,7 +103,7 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	init_parties(global, &left_cmnd, &right_cmnd, pipe_num);
 	if (left_cmnd == NULL)
 		return (1);
-	global->status = exec_builting(global->cmnd_list, global->env);
+	global->status = exec_builting(global->cmnd_list, global);
 	if (key == 0 && right_cmnd == NULL && global->status == SUCCESS)
 		return (SUCCESS);
 	int	fd[2];
@@ -115,24 +115,23 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	if (pid == 0)
 	{
 		close_fds(right_cmnd, fd, old_fd, 0);
-		if (exec_cmnd(left_cmnd, global->env) != SUCCESS)
+		if (exec_cmnd(left_cmnd, global) != SUCCESS)
 			return (FAILDE);
-		return (SUCCESS);
+		return (free_list(&left_cmnd, left_cmnd), SUCCESS);
 	}
 	if (pid > 0)
 	{
 		close_fds(NULL, NULL, old_fd, 1);
 		wait(&global->status);
-		
+		free_list(&left_cmnd, left_cmnd);
+		if (right_cmnd != NULL)
+			free_list(&right_cmnd, right_cmnd);
 		unlink(".heredoc");
 		if (right_cmnd != NULL)
 			ft_pipes(global, --pipe_num, fd, 1);
 		else
 			return (SUCCESS);
 	}
-	free_list(&left_cmnd, left_cmnd);
-	if (right_cmnd != NULL)
-		free_list(&right_cmnd, right_cmnd);
 	return (0);
 }
 
@@ -146,7 +145,7 @@ int shell(t_global *global)
 		line = readline("Minishel => ");
 		//fct for exit ctrl-D
 		if (line == NULL)
-			exit(global->status);
+			ft_exit(global, 1);
 		j = ft_strlen(line);
 		if (j != 0)
 			add_history(line);
@@ -156,6 +155,7 @@ int shell(t_global *global)
 		global->cmnd_list = init_list(global, global->cmnd_list, line);
 		n_cmnd = nbr_mots(global->cmnd, '|');
 		ft_pipes(global, n_cmnd, NULL, 0);
+		//free_list(&global->cmnd_list, global->cmnd_list);
 		free(line);
 	}
 	return (SUCCESS);
