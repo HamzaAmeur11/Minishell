@@ -6,28 +6,28 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/01 12:55:49 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 18:44:42 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
 
-int builtin_fct(t_cmnd *cmnd, t_global *glb)
+int	builtin_fct(t_cmnd *cmnd, t_global *glb)
 {
-	if (ft_strncmp(cmnd->cmnd[0] , (char *)"cd", 2) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"cd", 2) == SUCCESS)
 		return(ft_cd(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] , (char *)"pwd", 3) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"pwd", 3) == SUCCESS)
 		return(ft_pwd(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] , (char *)"env", 3) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"env", 3) == SUCCESS)
 		return(ft_env(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] , (char *)"echo", 4) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"echo", 4) == SUCCESS)
 		return(ft_echo(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] , (char *)"exit", 4) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"exit", 4) == SUCCESS)
 		return (ft_exit(glb, 1), SUCCESS);
-	 if (ft_strncmp(cmnd->cmnd[0] , (char *)"unset", 5) == SUCCESS)
+	 if (ft_strncmp(cmnd->cmnd[0] ,(char *)"unset", 5) == SUCCESS)
 	 	return(ft_unset(cmnd, &glb->env), SUCCESS);
-	 if (ft_strncmp(cmnd->cmnd[0] , (char *)"export", 6) == SUCCESS)
+	 if (ft_strncmp(cmnd->cmnd[0] ,(char *)"export", 6) == SUCCESS)
 	 	return(ft_export(cmnd, &glb->env), SUCCESS);
 	return (FAILDE);
 }
@@ -110,8 +110,8 @@ int	exec_cmnd(t_list *cmnd_list, t_global *glb)
 	if (builtin_fct(cmnd, glb) != SUCCESS)
 	{
 		if (other_fct(cmnd, &glb->env) != SUCCESS)
-			return (ft_putstr_fd(2, cmnd->cmnd[0]), free_tcmnd(cmnd), write(2 ,": command not found\n", 21), exit(127), FAILDE);//exit bwhd int
-		printf("i m here\n");
+			return (ft_putstr_fd(2, cmnd->cmnd[0]), free_tcmnd(cmnd)
+				, write(2 ,": command not found\n", 21), exit(127), FAILDE);//exit bwhd int
 	}
 	return (free_tcmnd(cmnd), exit(0), SUCCESS);
 }

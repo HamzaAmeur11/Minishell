@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/01 18:05:38 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 18:27:00 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ int shell(t_global *global)
 		global->cmnd_list = init_list(global, global->cmnd_list, line);
 		if (global->cmnd_list == NULL)
 			continue ;
-		print_l(&global->cmnd_list, "cmnd_list");
+		//print_l(&global->cmnd_list, "cmnd_list");
 		n_cmnd = nbr_mots(global->cmnd, '|');
 		global->status = ft_pipes(global, n_cmnd, NULL, 0);
 		free_list(&global->cmnd_list, global->cmnd_list);
