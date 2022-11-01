@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+         #
+#    By: hameur <hameur@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 18:05:22 by hmeur             #+#    #+#              #
-#    Updated: 2022/11/01 00:57:21 by hmeur            ###   ########.fr        #
+#    Updated: 2022/11/01 14:07:15 by hameur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ $(NAME) :	$(OBJS)
 	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)
 
 %.o : %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS) -O0
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean :
 	@rm -rf $(OBJS)

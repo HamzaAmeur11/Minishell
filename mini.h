@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/01 01:25:02 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/11/01 17:42:35 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char    *name_var(char *env);
 void	add_front(t_envi **envi, t_envi *new_node);
 int		change_var_value(t_envi *env,char *name, char *value);
 
-
+t_envi	*find_var(t_envi *env, char *name);
 
 //-------------------------------------------------------//
 
@@ -141,7 +141,7 @@ void	handler(int sig);
 
 
 
-void print_l(t_list *head, char *str);
+void print_l(t_list **head, char *str);
 
 
 

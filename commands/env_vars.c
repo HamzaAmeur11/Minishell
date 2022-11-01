@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 16:01:47 by hmeur             #+#    #+#             */
-/*   Updated: 2022/10/31 21:51:06 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/01 13:36:56 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,16 @@ t_envi	*find_var(t_envi *env, char *name)
 int	change_var_value(t_envi *env, char *name, char *value)
 {
 	t_envi	*temp;
+	char *ptr;
 
 	temp = find_var(env, name);
 	if (temp == NULL)
 		return (FAILDE);
 	free(temp->env_x);
-	temp->env_x = ft_strlcat(temp->var_name, ft_strlcat("=", value));
+	ptr = ft_strlcat((char *)"=", value);
+	temp->env_x = ft_strlcat(temp->var_name, ptr);
 	temp->var_value = value;
-	return (SUCCESS);
+	return (free(ptr), SUCCESS);
 }
 
 int	check_var(char *cmnd)

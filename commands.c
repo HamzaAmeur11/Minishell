@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:36:27 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/01 01:27:11 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/11/01 13:42:37 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 int	ft_pwd(t_cmnd *cmnd, t_envi **env)
 {
 	(void)cmnd;
-	(void)env;
-	char	pwd[1024];
+	t_envi *temp = find_var(*env, (char *)"PWD");
 
-	getcwd(pwd, 1024);
-	printf("%s\n", pwd);
-	ft_free(cmnd->cmnd);
+	printf("%s\n", temp->var_value);
 	return (SUCCESS);
 }
 
@@ -34,7 +31,6 @@ int ft_env(t_cmnd *cmnd, t_envi **env)
 		printf("%s=%s\n", temp->var_name, temp->var_value);
 		temp = temp->next;
 	}
-	ft_free(cmnd->cmnd);
 	return (SUCCESS);
 }
 
@@ -65,7 +61,7 @@ int ft_echo(t_cmnd *cmnd, t_envi **env)
 	int i = 0;
 	int key = 0;
 	//-nnnnnnnnnnnnnnnn
-	if (ft_strncmp(cmnd->cmnd[1], "-n", 2) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[1], (char *)"-n", 2) == SUCCESS)
 	{
 		i++;
 		key++;
@@ -79,7 +75,6 @@ int ft_echo(t_cmnd *cmnd, t_envi **env)
 	}
 	if (key == 0)
 		printf("\n");
-	free(cmnd);
 	return (SUCCESS);
 }
 

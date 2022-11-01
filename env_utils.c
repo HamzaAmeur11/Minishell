@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:47:10 by hameur            #+#    #+#             */
-/*   Updated: 2022/09/29 01:22:37 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/11/01 13:38:31 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *name_var(char *env)
 	i = 0;
 	while(env[i] != 0 && env[i] != '=')
 		i++;
-	name = malloc(i + 1);
+	name = (char *)malloc(i + 1);
 	while (env[++j] != '=')
 		name[j] = env[j];
 	name[j] = 0;
@@ -78,5 +78,8 @@ void delete_node_env(t_envi **env, int i)
 		return ;
 	t_envi *ptr = temp->next;
 	temp->next = ptr->next;
+	free(temp->env_x);
+	free(temp->var_name);
+	free(temp);
 	free(ptr);
 }
