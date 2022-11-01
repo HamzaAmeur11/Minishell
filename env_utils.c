@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:47:10 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/01 18:43:47 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 21:32:45 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*value_var(char *env)
 	i = 0;
 	while (env[i] != 0 && env[i] != '=')
 		i++;
-	return (env + i + 1);
+	return (ft_strdup(env + i + 1));
 }
 
 t_envi	*init_envi(char **env)

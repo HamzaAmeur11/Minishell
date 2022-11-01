@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 16:01:47 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/01 13:36:56 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 21:33:53 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	change_var_value(t_envi *env, char *name, char *value)
 	free(temp->env_x);
 	ptr = ft_strlcat((char *)"=", value);
 	temp->env_x = ft_strlcat(temp->var_name, ptr);
-	temp->var_value = value;
+	temp->var_value = ft_strdup(value);
 	return (free(ptr), SUCCESS);
 }
 
@@ -56,14 +56,17 @@ int	check_var(char *cmnd)
 int	ft_export(t_cmnd *cmnd, t_envi **env)
 {
 	char *name;
+	char *value;
 	
 	name =  name_var(cmnd->cmnd[1]);
+	value = value_var(cmnd->cmnd[1]);
 	if (check_var(cmnd->cmnd[1]) != SUCCESS)
 		return (FAILDE);
 	if (find_var(*env, name) != NULL)
 	{
-		change_var_value(*env, name, value_var(cmnd->cmnd[1]));
+		change_var_value(*env, name, value);
 		free(name);
+		free(value);
 		return (SUCCESS);
 	}
 	add_back(env, new_node(cmnd->cmnd[1]));

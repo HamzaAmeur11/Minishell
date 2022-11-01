@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/01 18:27:00 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/01 20:45:45 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,8 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	init_parties(global, &left_cmnd, &right_cmnd, pipe_num);
 	if (left_cmnd == NULL)
 		return (write(2, "Error Pipe\n", 11), FAILDE);
-	global->status = exec_builting(global->cmnd_list, global);
+	if (key == 0 && right_cmnd == NULL)
+		global->status = exec_builting(global->cmnd_list, global);
 	if (key == 0 && right_cmnd == NULL && global->status == SUCCESS)
 		return (free_list(&left_cmnd, left_cmnd), SUCCESS);
 	int	fd[2];
@@ -150,18 +151,6 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	return (0);
 }
 
-
-void print_l(t_list **head, char *str)
-{
-	t_list *temp = *head;
-	printf("%s\n", str);
-	while (temp != NULL)
-	{
-		printf("\t%s\n", temp->str);
-		temp = temp->next;
-	}
-}
-
 int shell(t_global *global)
 {
 	char *line;
@@ -182,11 +171,10 @@ int shell(t_global *global)
 		global->cmnd_list = init_list(global, global->cmnd_list, line);
 		if (global->cmnd_list == NULL)
 			continue ;
-		//print_l(&global->cmnd_list, "cmnd_list");
 		n_cmnd = nbr_mots(global->cmnd, '|');
 		global->status = ft_pipes(global, n_cmnd, NULL, 0);
-		free_list(&global->cmnd_list, global->cmnd_list);
 		free(line);
+		free_list(&global->cmnd_list, global->cmnd_list);
 	}
 	return (SUCCESS);
 }
