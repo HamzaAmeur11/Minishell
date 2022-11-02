@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:36:27 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/01 18:37:50 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/02 20:41:26 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*cherch_var(char *var, t_envi *env)
 			return (env->env_x + i + 1);
 		env = env->next;
 	}
-	return (NULL);
+	return ((char *)"");
 }
 
 int	ft_echo(t_cmnd *cmnd, t_envi **env)
