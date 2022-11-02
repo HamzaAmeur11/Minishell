@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/01 20:45:45 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/02 15:17:16 by megrisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	check_pipe(t_list *list, int t)
 void init_parties(t_global *glb, t_list **left, t_list **right, int pipe_num)
 {
 	int total_pipes = nbr_mots(glb->cmnd, '|');
+	if (glb->cmnd_list->type == PIPE)
+		return ;
 	if (check_pipe(glb->cmnd_list, total_pipes) == FAILDE)
 		return ;
 	char **str = ft_split(glb->cmnd, '|');
