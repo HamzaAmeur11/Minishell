@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:47:10 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/02 19:08:17 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/03 17:32:20 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	delete_node_env(t_envi **env, int i)
 	if (temp == NULL)
 		return ;
 	ptr = temp->next;
-	temp->next = NULL;
+	temp->next = ptr->next;
 	ptr->next = NULL;
 	free(ptr->env_x);
 	free(ptr->var_name);

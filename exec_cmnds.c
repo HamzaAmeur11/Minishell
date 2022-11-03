@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/01 18:44:42 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/03 20:58:36 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,13 @@ char **find_paths(t_envi **env)
 			break;
 		temp = temp->next;
 	}
+	if (temp == NULL)
+		return (NULL);
 	char *str = remove_debut(temp->env_x, 5);
 	paths = ft_split(str, ':');
+	j = 0;
+	while (paths[j] != NULL)
+		printf("paths : %s\n",paths[j++]);
 	free(str);
 	return (paths);
 }
@@ -67,12 +72,15 @@ char **find_paths(t_envi **env)
 int other_fct(t_cmnd *cmnd, t_envi **env)
 {
 	char **paths = find_paths(env);
+	if (paths == NULL)
+		return (FAILDE);
 	char *path_cmnd;
 	char *ptr;
+	// if (cmnd->cmnd[0])
 	ptr =  ft_strlcat((char *)"/", cmnd->cmnd[0]);
 	int i = 0;
 	int j;
-	while (paths[i] != NULL)
+	while (paths != NULL && paths[i] != NULL)
 	{
 		path_cmnd = ft_strlcat(paths[i++], ptr);
 		if (access(path_cmnd, F_OK) == SUCCESS)
