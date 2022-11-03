@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/02 15:17:16 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/04 00:37:35 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void init_parties(t_global *glb, t_list **left, t_list **right, int pipe_num)
 	if (str == NULL)
 		return ;
 	*left = init_list(glb, *left, str[total_pipes - pipe_num]);
-
 	if (str[total_pipes - pipe_num + 1] != NULL)
 		*right = init_list(glb, *right, str[total_pipes - pipe_num + 1]);
 	else
@@ -102,10 +101,13 @@ int exec_builting(t_list *cmnd_list, t_global *glb)
 		old_fd = redirection_inp(name_red(cmnd_list), red_type);
 		red_back = STDIN_FILENO;
 	}
-	if (builtin_fct(cmnd, glb) != SUCCESS)
-		i = -1;
+	if (cmnd->cmnd[0] != NULL)
+	{	
+		if (builtin_fct(cmnd, glb) != SUCCESS)
+			i = -1;
+	}
 	if (red_type != 0)
-		dup2(old_fd, red_back);
+		dup2(old_fd, red_back); 
 	free_tcmnd(cmnd);
 	if (i == -1)
 		return (FAILDE);
@@ -125,7 +127,7 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	if (key == 0 && right_cmnd == NULL)
 		global->status = exec_builting(global->cmnd_list, global);
 	if (key == 0 && right_cmnd == NULL && global->status == SUCCESS)
-		return (free_list(&left_cmnd, left_cmnd), SUCCESS);
+		return (free_list(&left_cmnd, left_cmnd), unlink(".heredoc"), SUCCESS);
 	int	fd[2];
 	if (pipe(fd) < 0)
 		return (FAILDE);
@@ -143,7 +145,6 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	{
 		close_fds(NULL, NULL, old_fd, 1);
 		wait(&global->status);
-		unlink(".heredoc");
 		if (right_cmnd != NULL)
 			ft_pipes(global, --pipe_num, fd, 1);
 	}
@@ -157,17 +158,14 @@ int shell(t_global *global)
 {
 	char *line;
 	int	n_cmnd;
-	int j;
 	while(1337)
 	{
 		line = readline("Minishel => ");
-		//fct for exit ctrl-D
 		if (line == NULL)
-			ft_exit(global, 1);
-		j = ft_strlen(line);
-		if (j != 0)
+			ft_exit(global);
+		if (ft_strlen(line) != 0)
 			add_history(line);
-		if (j == 0)
+		else
 			continue ;
 		global->cmnd = line;
 		global->cmnd_list = init_list(global, global->cmnd_list, line);

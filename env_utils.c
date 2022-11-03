@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:47:10 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/03 17:32:20 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/04 00:31:35 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	free_env(t_envi **env)
 		*env = temp->next;
 		free(temp->env_x);
 		free(temp->var_name);
+		free(temp->var_value);
 		free(temp);
 		temp = *env;
 	}

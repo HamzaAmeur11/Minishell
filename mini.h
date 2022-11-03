@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/01 18:00:00 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/04 00:37:10 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int		builtin_fct(t_cmnd *cmnd, t_global *glb);
 void	ft_free(char **str);
 void 	free_tcmnd(t_cmnd *cmnd);
 int		ft_pwd(t_cmnd *cmnd, t_envi **env);
-int		ft_exit(t_global *glb, int key);
+int		ft_exit(t_global *glb);
 int		ft_cd(t_cmnd *cmnd, t_envi **env);
 int		ft_echo(t_cmnd *cmnd, t_envi **env);
 int		ft_env(t_cmnd *cmnd, t_envi **env);

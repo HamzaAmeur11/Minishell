@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   t_list.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/02 17:42:40 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/04 00:24:26 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int fct2(t_global *glb, char *s, int *i)
 	char *var_name = nume_var(s, i);
 	exit_s = ft_itoa(glb->status);
 	len = ft_strlen(exit_s);
-	if (ft_strncmp(var_name, "?", 1) == SUCCESS)
+	if (ft_strncmp(var_name, (char *)"?", 1) == SUCCESS)
 		return (free(var_name), free(exit_s), len);
 	else if (var_name[0] == 0)
 		return (free(var_name), free(exit_s), 1);
@@ -177,10 +177,10 @@ void	fct4(t_global *glb, char *str, char *ret, int **tab)
 
 	exit_s = ft_itoa(glb->status);
 	char *var_name = nume_var(str, tab[0]);
-	if (ft_strncmp(exit_s, "?", 1) == SUCCESS)
+	if (ft_strncmp(exit_s, (char *)"?", 1) == SUCCESS)
 		fct5(ret, tab, exit_s);
 	else if (var_name[0] == 0)
-		fct5(ret, tab, "$");
+		fct5(ret, tab, (char *)"$");
 	while (temp != NULL)
 	{
 		if (ft_strncmp(var_name, temp->var_name, ft_strlen(glb->env->var_name)) == SUCCESS)
