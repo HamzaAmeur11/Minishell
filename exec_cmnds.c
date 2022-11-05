@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmnds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/05 01:19:28 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/05 15:34:26 by hmeur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,12 @@ int	exec_cmnd(t_list *cmnd_list, t_global *glb)
 	int		red_type = 0;
 
 	cmnd = initializ_cmnd(cmnd_list, glb->env);
-	int i = 0;
-	while (cmnd->cmnd[i] != NULL)
-		printf("***%s\n", cmnd->cmnd[i++]);
-	
 	red_type = type_red(cmnd_list);
 	if (red_type == R_OUT || red_type == DR_OUT)
 		redirection_out(name_red(cmnd_list), red_type);
 	else if (red_type == R_INP || red_type == DR_INP)
 		redirection_inp(name_red(cmnd_list), red_type);
-		
+
 	if (builtin_fct(cmnd, glb) != SUCCESS)
 	{
 		if (other_fct(cmnd, &glb->env) != SUCCESS)
