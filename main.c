@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/04 00:37:35 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/05 01:52:24 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 		return (FAILDE);
 	if (pid == 0)
 	{
+		close(fd[0]);
 		close_fds(right_cmnd, fd, old_fd, 0);
 		if (exec_cmnd(left_cmnd, global) != SUCCESS)
 			return (FAILDE);
@@ -143,7 +144,7 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	}
 	if (pid > 0)
 	{
-		close_fds(NULL, NULL, old_fd, 1);
+		close_fds(NULL, fd, old_fd, 1);
 		wait(&global->status);
 		if (right_cmnd != NULL)
 			ft_pipes(global, --pipe_num, fd, 1);
@@ -154,12 +155,112 @@ int ft_pipes(t_global *global, int pipe_num, int *old_fd, int key)
 	return (0);
 }
 
+
+int	execute_cmnd(t_global *glb, t_list *current, int i, int *fd)
+{
+	int	t_pipe;
+
+	t_pipe = nbr_mots(glb->cmnd, '|');
+	if (t_pipe == 1)
+		return (exec_cmnd(current, glb), exit(0), SUCCESS);
+	if (pipe(fd) == FAILDE)
+		return (FAILDE);
+	if (i == 0)
+	{
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(STDOUT_FILENO);
+	}
+	if (i == t_pipe - 1)
+	{
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[1]);
+		close(STDIN_FILENO);
+	}
+	else
+	{
+		dup2(fd[0], STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
+	}
+	if (exec_cmnd(current, glb) != SUCCESS)
+			exit(FAILDE);
+	exit(SUCCESS);
+}
+
+int	exec_other(t_global *glb, t_list *current)
+{
+	int pid;
+	int ret = 0;
+
+	pid = fork();
+	if (pid == 0)
+		ret = exec_cmnd(current, glb);
+	else
+		wait(&glb->status);
+	return (ret);
+}
+
+int ftt_pipes(t_global *glb)
+{
+	t_list	*current = NULL;
+	char	**cmnd;
+	int		t_pipe;
+	int		fd[2];
+	int		i = 0;
+	int		pid = 1;
+	
+	// if (pipe(glb->fd) == FAILDE)
+	// 	return (FAILDE);
+	cmnd = ft_split(glb->cmnd, '|');
+	t_pipe = nbr_mots(glb->cmnd, '|');
+	if (t_pipe == 1)
+	{
+		current = init_list(glb, current, cmnd[0]);
+		printf("current : %s\n", current->str);
+		if (exec_builting(current, glb) == SUCCESS)
+			return (free_list(&current, current), SUCCESS);
+		else
+			return (exec_other(glb, current));
+		free_list(&current, current);
+	}
+	while (i != t_pipe)
+	{
+		current = init_list(glb, current, cmnd[i++]);
+		if (pipe(fd) != SUCCESS)
+			return(FAILDE);
+		printf("current : %s && i == %d\n", current->str, t_pipe);
+		if (pid > 0)
+			pid = fork();
+		if (pid == 0)
+		{
+			execute_cmnd(glb, current, i - 1, fd);
+			exit(0);
+		}
+		if (pid != 0 && i == t_pipe)
+		{
+			printf("before i == %d   t_pipe == %d\n", i, t_pipe);
+			waitpid(pid, &glb->status, -1);
+			printf("after i == %d   t_pipe == %d\n", i, t_pipe);
+			close(fd[0]);
+			close(fd[1]);
+		}
+		free_list(&current, current);
+	}
+	printf("i'm here from %d prosses\n", pid);
+	return (SUCCESS);
+}
+
+
 int shell(t_global *global)
 {
 	char *line;
 	int	n_cmnd;
 	while(1337)
 	{
+		global->p_in = -1;
+		global->p_out = -1;
 		line = readline("Minishel => ");
 		if (line == NULL)
 			ft_exit(global);
@@ -172,7 +273,7 @@ int shell(t_global *global)
 		if (global->cmnd_list == NULL)
 			continue ;
 		n_cmnd = nbr_mots(global->cmnd, '|');
-		global->status = ft_pipes(global, n_cmnd, NULL, 0);
+		global->status = ftt_pipes(global);
 		free(line);
 		free_list(&global->cmnd_list, global->cmnd_list);
 	}

@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/04 00:37:10 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/04 23:54:10 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ typedef struct t_global
 	struct t_list	*cmnd_list; //v
 	char			*cmnd; //v
 	int				status;
+	int				p_in;
+	int				p_out;
+	int				fd;
 
 }	t_global;
 
