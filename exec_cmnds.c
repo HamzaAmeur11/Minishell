@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmnds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeur <hmeur@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/05 15:34:26 by hmeur            ###   ########.fr       */
+/*   Updated: 2022/11/07 12:30:54 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char *remove_debut(char* s, int i)
 	char *str;
 
 	str = (char *)malloc(ft_strlen(s) - i + 1);
+	if (!str)
+		return (NULL);
 	while (s[i] != 0)
 		str[j++] = s[i++];
 	str[j] = 0;
@@ -67,7 +69,12 @@ char **find_paths(t_envi **env)
 	return (paths);
 }
 
-
+int is_file(char *str)
+{
+	if (ft_strncmp(str, "./", 1) == SUCCESS)
+		return (FAILDE);
+	return (SUCCESS);
+}
 
 int other_fct(t_cmnd *cmnd, t_envi **env)
 {
@@ -75,12 +82,17 @@ int other_fct(t_cmnd *cmnd, t_envi **env)
 		return (FAILDE);
 	if (access(cmnd->cmnd[0], X_OK) == SUCCESS)
 		return (execve(cmnd->cmnd[0], cmnd->cmnd, cmnd->env));
+	if (is_file(cmnd->cmnd[0]) != SUCCESS)
+		return (ft_putstr_fd(2, cmnd->cmnd[0]), ft_putstr_fd(2, (char *)": No such file or directory\n"), FAILDE);
 	char **paths = find_paths(env);
 	if (paths == NULL)
+	{
+		ft_putstr_fd(2, cmnd->cmnd[0]);
+		ft_putstr_fd(2, (char *)": command not found\n");
 		return (FAILDE);
+	}
 	char *path_cmnd;
 	char *ptr;
-	//absolut path : /bin/ls
 	ptr =  ft_strlcat((char *)"/", cmnd->cmnd[0]);
 	int i = 0;
 	while (paths[i] != NULL)
@@ -94,7 +106,8 @@ int other_fct(t_cmnd *cmnd, t_envi **env)
 		}
 		free(path_cmnd);
 	}
-	return (free(ptr), ft_free(paths), FAILDE);
+	return (ft_putstr_fd(2, cmnd->cmnd[0]), ft_putstr_fd(2, (char *)": command not found\n")
+		, free(ptr), ft_free(paths), FAILDE);
 }
 
 
@@ -119,12 +132,11 @@ int	exec_cmnd(t_list *cmnd_list, t_global *glb)
 		redirection_out(name_red(cmnd_list), red_type);
 	else if (red_type == R_INP || red_type == DR_INP)
 		redirection_inp(name_red(cmnd_list), red_type);
-
+		
 	if (builtin_fct(cmnd, glb) != SUCCESS)
 	{
 		if (other_fct(cmnd, &glb->env) != SUCCESS)
-			return (ft_putstr_fd(2, cmnd->cmnd[0]), free_tcmnd(cmnd)
-				, write(2 ,": command not found\n", 21), exit(127), FAILDE);//exit bwhd int
+			return (free_tcmnd(cmnd), exit(127), FAILDE);
 	}
 	return (free_tcmnd(cmnd), exit(0), SUCCESS);
 }

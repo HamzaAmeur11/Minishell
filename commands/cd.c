@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:23:51 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/03 22:49:51 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 12:27:37 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ char	*get_var(t_envi *env, char *str)
 
 char *check_flags(t_envi *env, char *flag)
 {
-	char *old_pwd;
+	char	*old_pwd;
 	
 	if (flag == NULL)
 	{
 		old_pwd = get_var(env, (char *)"HOME");
 		if (old_pwd == NULL)
-			write(2, "cd: HOME not set\n", 17);
+			ft_putstr_fd(2, "cd: HOME not set\n");
 	}
 	else if (ft_strncmp(flag , (char *)"-", 1) == SUCCESS)
 	{
@@ -42,13 +42,13 @@ char *check_flags(t_envi *env, char *flag)
 		if (old_pwd != NULL)
 			printf("~%s\n", old_pwd);
 		else
-			write(2, "cd: OLDPWD not set\n", 20);
+			ft_putstr_fd(2, "cd: OLDPWD not set\n");
 	}
 	else if (ft_strncmp(flag , (char *)"~", 1) == SUCCESS)
 	{
 		old_pwd = get_var(env, (char *)"HOME");
 		if (old_pwd == NULL)
-			write(2, "cd: HOME not set\n", 17);
+			ft_putstr_fd(2, "cd: HOME not set\n");
 	}	
 	else
 		return (NULL);
@@ -84,10 +84,10 @@ int	ft_cd(t_cmnd *cmnd, t_envi **env)
 		{
 			if (is_flag(cmnd->cmnd[1]) != SUCCESS)
 				printf("cd: no such file or directory: %s\n", cmnd->cmnd[1]);
-			return (FAILDE);
+			return (free(o_pwd), free(old_pwd), FAILDE);
 		}
 	}
 	change_var_value(*env, (char *)"OLDPWD", old_pwd);
-	change_var_value(*env, (char *)"PWD", ft_strdup(getcwd(pwd, 1024)));
-	return (SUCCESS);
+	change_var_value(*env, (char *)"PWD", pwd);
+	return (free(o_pwd), free(old_pwd), SUCCESS);
 }

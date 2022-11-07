@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/04 00:24:26 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 12:33:50 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,38 @@ int is_word(char *str)
     return (SUCCESS);
 }
 
-int check_type(char *str)
+int check_type(char *str, int key)
 {
-    if (is_word(str) == SUCCESS)
+	if (key == 1)
+		return (WORD);
+    else if (key == 0 && is_word(str) == SUCCESS)
         return (WORD);
     else if (str[0] == '|' && str[1] == 0)
         return (PIPE);
-    else if (str[0] == '>' && str[1] == 0)
+    else if (str[0] == '>' && str[1] != '>')
         return (R_OUT);
-    else if (str[0] == '<' && str [1] == 0)
+    else if (str[0] == '<' && str [1] != '<')
         return(R_INP);
-    else if (str[0] == '>' && str[1] == '>' && str[2] == 0)
+    else if (str[0] == '>' && str[1] == '>')
         return (DR_OUT);
-    else if (str[0] == '<' && str[1] == '<' && str[2] == 0)
+    else if (str[0] == '<' && str[1] == '<')
         return (DR_INP);
     return (FAILDE);
 }
 
-t_list *new_list(char *str)
+t_list *new_list(char *str, int key, int quote)
 {
     t_list  *node;
 
     node = (t_list *)malloc(sizeof(t_list));
     if (!node)
         return (NULL);
+	
     node->str = ft_strdup(str);
-    node->type = check_type(str);
+	if (key == 0)
+    	node->type = check_type(str, quote);
+	else
+		node->type = WORD;
     if (node->type == FAILDE)
         return (NULL);
     node->next = NULL;
@@ -88,14 +94,16 @@ char *nume_var(char* str, int *id)
 	int i = 0;
 	int	j = (*id) + 1;
 	(*id)++;
-	while (str[*id] != 0 && str[*id] != '$' && str[*id] != ' ' && str[*id] != DQUOTE)
+	while (str[*id] != 0 && str[*id] != '$' && str[*id] != ' ' && str[*id] != DQUOTE && str[*id] != SQUOTE)
 	{
 		i++;
 		(*id)++;
 	}
 	char *ret  = (char *)malloc(sizeof(char) * (i + 1));
+	if (!ret)
+		return (NULL);
 	i = 0;
-	while (str[j] != 0 && str[j] != '$' && str[j] != ' ' && str[j] != DQUOTE)
+	while (str[j] != 0 && str[j] != '$' && str[j] != ' ' && str[j] != DQUOTE && str[j] != SQUOTE)
 		ret[i++] = str[j++];
 	ret[i] = 0;
 	return(ret);
@@ -128,7 +136,7 @@ int fct2(t_global *glb, char *s, int *i)
 int fct(t_global *glb, char *str, int *id, char c)
 {
 	int i = 0;
-	// int j = (*id) + 1;
+	(*id)++;
 
 	while (str[(*id)] != 0 && str[(*id)] != c)
 	{
@@ -194,7 +202,7 @@ void	fct4(t_global *glb, char *str, char *ret, int **tab)
 
 void	fct3(t_global *glb, char *str, char *ret, int **tab)
 {
-	char c = str[(*tab[0])];
+	char c = str[(*tab[0])++];
 	
 	while (str[(*tab[0])] != 0 && str[*tab[0]] != c)
 	{
@@ -212,6 +220,8 @@ char *change_str(t_global *glb, char *str)
 	int i = 0;
 	int j = 0;
 	int	**tab = (int **)malloc(sizeof(int *) * 2);
+	if (!tab)
+		return (NULL);
 	tab[0] = &i;
 	tab[1] = &j;
 
@@ -239,13 +249,23 @@ int check_list(t_list *list)
 	while (temp != NULL)
 	{
 		if (temp->type != WORD && temp->type != PIPE && temp->next == NULL)
-		return (write(2, "syntax error near unexpected token `newline'\n", 45), FAILDE);
+		return (ft_putstr_fd(2, "syntax error near unexpected token `newline'\n"), FAILDE);
 		temp = temp->next;
 	}
 	return (SUCCESS);
 }
 
-t_list *init_list(t_global *glb, t_list *head,  char *str)
+int check_quotes(char *str)
+{
+	int i = 0;
+	while (str[i] != 0 && str[i] != DQUOTE && str[i] != SQUOTE)
+		i++;
+	if (str[i] == DQUOTE || str[i] == SQUOTE)
+		return (1);
+	return (0);
+}
+
+t_list *init_list(t_global *glb, t_list *head, char *str, int key)
 {
     char	**cmnd;
     char	*temp;
@@ -260,8 +280,9 @@ t_list *init_list(t_global *glb, t_list *head,  char *str)
     while (cmnd != NULL && cmnd[i] != NULL)
     {
         temp = change_str(glb, cmnd[i++]);
-        if (add_back_list(&head, new_list(temp)) != SUCCESS)
-            return (ft_free(cmnd), free(temp), free_list(&head, head), write(2, "Error pipe\n", 11), NULL);//free
+		
+        if (add_back_list(&head, new_list(temp, key, check_quotes(cmnd[i - 1]))) != SUCCESS)
+            return (ft_free(cmnd), free(temp), free_list(&head, head), ft_putstr_fd(2, "Error pipe\n"), NULL);//free
 		free(temp);
     }
     ft_free(cmnd);
@@ -270,20 +291,26 @@ t_list *init_list(t_global *glb, t_list *head,  char *str)
     return (head);
 }
 
+// void print_l(t_list *head)
+// {
+// 	while (head != NULL)
+// 	{
+// 		printf("init list :type = %d %s\n", head->type, head->str);
+// 		head = head->next;
+// 	}
+// }
 
-/*
-int main(int ac, char **av, char **env)
-{
-	t_global *glb = (t_global *)malloc(sizeof(t_global));
-	glb->env = init_envi(env);
-	t_list *head;
-	char *line;
-	while (1)
-	{
-		line = readline("zeeeeebi =>");
-		init_list(glb, head, line);
+// int main(int ac, char **av, char **env)
+// {
+// 	t_global *glb = (t_global *)malloc(sizeof(t_global));
+// 	glb->env = init_envi(env);
+// 	t_list *head;
+// 	char *line;
+// 	while (1)
+// 	{
+// 		line = readline("zeeeeebi =>");
+// 		head = init_list(glb, head, line);
 		
-		print_l(head);
-	}
-}
-*/
+// 		print_l(head);
+// 	}
+// }
