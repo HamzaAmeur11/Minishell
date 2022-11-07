@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 12:33:50 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 16:31:20 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ int len_str(t_global *glb, char *str)
 void	fct5(char *str, int **tab, char *s)
 {
 	int	i = 0;
+
 	
 	while (s[i] != 0)
 		str[(*tab[1])++] = s[i++];
@@ -184,10 +185,11 @@ void	fct4(t_global *glb, char *str, char *ret, int **tab)
 	char	*exit_s;
 
 	exit_s = ft_itoa(glb->status);
-	char *var_name = nume_var(str, tab[0]);
-	if (ft_strncmp(exit_s, (char *)"?", 1) == SUCCESS)
+	if (ft_strncmp(str, (char *)"?", 1) == SUCCESS)
 		fct5(ret, tab, exit_s);
-	else if (var_name[0] == 0)
+	printf("exit_s = %s\n", exit_s);
+	char *var_name = nume_var(str, tab[0]);
+	if (var_name[0] == 0)
 		fct5(ret, tab, (char *)"$");
 	while (temp != NULL)
 	{
@@ -240,6 +242,7 @@ char *change_str(t_global *glb, char *str)
 	}
 	ret[j] = 0;
 	free(tab);
+	printf("---> %s\n", ret);
 	return (ret);
 }
 
@@ -276,7 +279,7 @@ t_list *init_list(t_global *glb, t_list *head, char *str, int key)
     head = NULL;
 		
 	if (cmnd == NULL)
-		return (printf("Error quotes\n"), NULL);
+		return (ft_putstr_fd(2, (char *)"Error quotes\n"), NULL);
     while (cmnd != NULL && cmnd[i] != NULL)
     {
         temp = change_str(glb, cmnd[i++]);

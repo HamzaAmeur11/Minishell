@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/06 17:21:53 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/07 15:28:38 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	heredoc(char *file_name);
 int		type_red(t_list *cmnd);
 
 
-
+int check_quotes(char *str);
 
 t_cmnd	*initializ_cmnd(t_list *cmnd_list, t_envi *env);
 char	**init_env_table(t_envi *envi, int size);
@@ -143,7 +143,6 @@ void	handler(int sig);
 
 
 
-// void print_l(t_list **head, char *str);
 
 
 

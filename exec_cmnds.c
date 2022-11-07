@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 12:30:54 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 15:39:07 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ int	exec_cmnd(t_list *cmnd_list, t_global *glb)
 		redirection_out(name_red(cmnd_list), red_type);
 	else if (red_type == R_INP || red_type == DR_INP)
 		redirection_inp(name_red(cmnd_list), red_type);
-		
 	if (builtin_fct(cmnd, glb) != SUCCESS)
 	{
 		if (other_fct(cmnd, &glb->env) != SUCCESS)
