@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 16:31:20 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 17:23:35 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,12 +185,11 @@ void	fct4(t_global *glb, char *str, char *ret, int **tab)
 	char	*exit_s;
 
 	exit_s = ft_itoa(glb->status);
-	if (ft_strncmp(str, (char *)"?", 1) == SUCCESS)
-		fct5(ret, tab, exit_s);
-	printf("exit_s = %s\n", exit_s);
 	char *var_name = nume_var(str, tab[0]);
 	if (var_name[0] == 0)
 		fct5(ret, tab, (char *)"$");
+	else if (ft_strncmp(var_name, (char *)"?", 1) == SUCCESS)
+		fct5(ret, tab, exit_s);
 	while (temp != NULL)
 	{
 		if (ft_strncmp(var_name, temp->var_name, ft_strlen(glb->env->var_name)) == SUCCESS)
@@ -242,7 +241,6 @@ char *change_str(t_global *glb, char *str)
 	}
 	ret[j] = 0;
 	free(tab);
-	printf("---> %s\n", ret);
 	return (ret);
 }
 
@@ -251,8 +249,8 @@ int check_list(t_list *list)
 	t_list *temp = list;
 	while (temp != NULL)
 	{
-		if (temp->type != WORD && temp->type != PIPE && temp->next == NULL)
-		return (ft_putstr_fd(2, "syntax error near unexpected token `newline'\n"), FAILDE);
+		// if (temp->type != WORD && temp->type != PIPE && temp->next == NULL)
+		// return (ft_putstr_fd(2, "syntax error near unexpected token `newline'\n"), FAILDE);
 		temp = temp->next;
 	}
 	return (SUCCESS);

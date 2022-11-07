@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 15:39:07 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 17:29:18 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int	exec_cmnd(t_list *cmnd_list, t_global *glb)
 	if (builtin_fct(cmnd, glb) != SUCCESS)
 	{
 		if (other_fct(cmnd, &glb->env) != SUCCESS)
-			return (free_tcmnd(cmnd), exit(127), FAILDE);
+			return (free_tcmnd(cmnd), exit(125), FAILDE);
 	}
 	return (free_tcmnd(cmnd), exit(0), SUCCESS);
 }

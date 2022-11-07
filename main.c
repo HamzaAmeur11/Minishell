@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/07 15:33:29 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/07 17:26:40 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,14 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 int check_red_name(char *str)
 {
 	int i = 0;
-
-	while (str[i] != 0 && (str[i] == '>' || str[i] == '<'))
+	char c = str[i];
+	while (str[i] != 0 && str[i] == c)
 		i++;
-	if (str[i] == 0)
+	if (c == '>')
+		c = '<';
+	else if (c == '<')
+		c = '>';
+	if (str[i] == 0 || str[i] == c)
 		return (FAILDE);
 	return (SUCCESS);
 }
@@ -180,7 +184,7 @@ int shell(t_global *global)
 		if (global->cmnd_list == NULL)
 			continue ;
 		n_cmnd = nbr_mots(global->cmnd, '|');
-		global->status = ft_pipes(global, n_cmnd);
+		ft_pipes(global, n_cmnd);
 		unlink(".heredoc");
 		free(line);
 		free_list(&global->cmnd_list, global->cmnd_list);
