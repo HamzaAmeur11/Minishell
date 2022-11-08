@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/07 15:28:38 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 17:15:04 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char    *name_var(char *env);
 void	add_front(t_envi **envi, t_envi *new_node);
 int		change_var_value(t_envi *env,char *name, char *value);
 
-t_envi	*find_var(t_envi *env, char *name);
+t_envi	*find_var(t_envi **env, char *name);
 
 //-------------------------------------------------------//
 

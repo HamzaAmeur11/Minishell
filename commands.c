@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:36:27 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 12:44:50 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 16:50:37 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ int	ft_env(t_cmnd *cmnd, t_envi **env)
 
 	(void)cmnd;
 	temp = *env;
-	while (temp != NULL)
+	while (temp != NULL && temp->var_name != NULL && temp->var_value != NULL)
 	{
-		printf("%s=%s\n", temp->var_name, temp->var_value);
+		if (temp->var_value != NULL)
+			printf("%s=%s\n", temp->var_name, temp->var_value);
 		temp = temp->next;
 	}
 	return (SUCCESS);

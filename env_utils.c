@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:47:10 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/07 16:29:44 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 17:11:42 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*name_var(char *env)
 	name = (char *)malloc(i + 1);
 	if (!name)
 		return (NULL);
-	while (env[++j] != '=')
+	while (env != 0 && env[++j] != '=')
 		name[j] = env[j];
 	name[j] = 0;
 	return (name);
@@ -35,11 +35,15 @@ char	*name_var(char *env)
 char	*value_var(char *env)
 {
 	int	i;
+	char *ptr;
 
 	i = 0;
+
 	while (env[i] != 0 && env[i] != '=')
 		i++;
-		char *ptr = env + i + 1;
+	if (env[i + 1] == 0)
+		return (NULL);
+	ptr = env + i + 1;
 	return (ft_strdup(ptr));
 }
 

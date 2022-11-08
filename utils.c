@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 14:58:17 by hmeur             #+#    #+#             */
-/*   Updated: 2022/10/30 13:11:35 by megrisse         ###   ########.fr       */
+/*   Updated: 2022/11/08 17:16:57 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,20 @@ char *ft_strlcat(char *s1, char *s2)
 	char *str;
 	 
 	j = -1;
-	i = ft_strlen(s1);
-	i += ft_strlen(s2);
+	i = 0;
+	if (s1 == NULL && s2 == NULL)
+		return (NULL);
+	if (s1 != NULL)
+		i = ft_strlen(s1);
+	if (s2 != NULL)
+		i += ft_strlen(s2);
 	str = (char*)malloc(i + 1);
 	if (!str)
 		return (NULL);
 	i = -1;
-	while (s1[++i] != 0)
+	while (s1 != NULL && s1[++i] != 0)
 		str[i] = s1[i];
-	while (s2[++j] != 0)
+	while (s2 != NULL && s2[++j] != 0)
 		str[i++] = s2[j];
 	str[i] = 0;
 	return (str);
@@ -72,10 +77,12 @@ int	ft_strncmp(char *s1, char *s2, int i)
 	int	x;
 
 	x = 0;
+	if (s1 == NULL || s2 == NULL)
+		return (FAILDE);
 	while (s1[x] != 0 && s2[x] != 0 && s1[x] == s2[x] && i > x)
 		x++;
 	if (s1[x] == s2[x] && i == x)
-		return (0);
+		return (SUCCESS);
 	return (s1[x] - s2[x]);
 }
 

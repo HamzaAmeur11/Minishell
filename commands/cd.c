@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:23:51 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 15:49:33 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 17:15:27 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	ft_cd(t_cmnd *cmnd, t_envi **env)
 		}
 	}
 	getcwd(pwd, 1024);
-	change_var_value(find_var(*env, "OLDPWD"), (char *)"OLDPWD", old_pwd);
-	change_var_value(find_var(*env, "PWD"), (char *)"PWD", pwd);
+	change_var_value(find_var(env, "OLDPWD"), (char *)"OLDPWD", old_pwd);
+	change_var_value(find_var(env, "PWD"), (char *)"PWD", pwd);
 	return (free(o_pwd), free(old_pwd), SUCCESS);
 }

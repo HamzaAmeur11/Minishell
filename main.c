@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/07 17:26:40 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 17:46:50 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 		free_list(&current, current);
 	}
 	while (waitpid(-1, &glb->status, 0) > 0);
+	if (WIFEXITED(glb->status) == SUCCESS)
+		printf("pppppp\n");
 	close(lastfd);
 	
 	return (ft_free(cmnd), SUCCESS);
@@ -152,7 +154,7 @@ int check_syntax(t_list **list)
 			return (ft_putstr_fd(2, "syntax error near unexpected token `|'\n"), free_list(list, *list), FAILDE);
 		if (cmnd->type == PIPE)
 			prev = -1;
-		if (cmnd->type != WORD && cmnd->type != PIPE && cmnd->next == NULL && check_red_name(cmnd->str) == FAILDE)
+		if (cmnd->type != WORD && cmnd->type != PIPE && check_red_name(cmnd->str) == FAILDE)
 			return (ft_putstr_fd(2, "syntax error near unexpected token `newline'\n"), free_list(list, *list), FAILDE);
 		if (cmnd->type != PIPE && cmnd->next != NULL && cmnd->next->type == PIPE)
 			prev = 0;
