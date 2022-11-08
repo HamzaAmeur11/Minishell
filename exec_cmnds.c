@@ -6,40 +6,40 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 17:29:18 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 22:16:12 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-
 int	builtin_fct(t_cmnd *cmnd, t_global *glb)
 {
 	if (cmnd->cmnd[0] == NULL)
 		return (FAILDE);
-	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"cd", 2) == SUCCESS)
-		return(ft_cd(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"pwd", 3) == SUCCESS)
-		return(ft_pwd(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"env", 3) == SUCCESS)
-		return(ft_env(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"echo", 4) == SUCCESS)
-		return(ft_echo(cmnd, &glb->env), SUCCESS);
-	if (ft_strncmp(cmnd->cmnd[0] ,(char *)"exit", 4) == SUCCESS)
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"cd", 2) == SUCCESS)
+		return (ft_cd(cmnd, &glb->env), SUCCESS);
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"pwd", 3) == SUCCESS)
+		return (ft_pwd(cmnd, &glb->env), SUCCESS);
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"env", 3) == SUCCESS)
+		return (ft_env(cmnd, &glb->env), SUCCESS);
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"echo", 4) == SUCCESS)
+		return (ft_echo(cmnd, &glb->env), SUCCESS);
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"exit", 4) == SUCCESS)
 		return (ft_exit(glb), SUCCESS);
-	 if (ft_strncmp(cmnd->cmnd[0] ,(char *)"unset", 5) == SUCCESS)
-	 	return(ft_unset(cmnd, &glb->env), SUCCESS);
-	 if (ft_strncmp(cmnd->cmnd[0] ,(char *)"export", 6) == SUCCESS)
-	 	return(ft_export(cmnd, &glb->env), SUCCESS);
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"unset", 5) == SUCCESS)
+		return (ft_unset(cmnd, &glb->env), SUCCESS);
+	if (ft_strncmp(cmnd->cmnd[0], (char *)"export", 6) == SUCCESS)
+		return (ft_export(cmnd, &glb->env), SUCCESS);
 	return (FAILDE);
 }
 
-char *remove_debut(char* s, int i)
+char	*remove_debut(char *s, int i)
 {
-	int j = 0;
-	char *str;
+	char	*str;
+	int		j;
 
 	str = (char *)malloc(ft_strlen(s) - i + 1);
+	j = 0;
 	if (!str)
 		return (NULL);
 	while (s[i] != 0)
@@ -48,85 +48,92 @@ char *remove_debut(char* s, int i)
 	return (str);
 }
 
-char **find_paths(t_envi **env)
+char	**find_paths(t_envi **env)
 {
-	int j = 1;
-	t_envi *temp = *env;
-	char **paths;
+	char	**paths;
+	t_envi	*temp;
+	char	*str;
+	int		j;
+
+	paths = NULL;
+	str = NULL;
+	temp = *env;
+	j = 1;
 	while (temp != NULL)
 	{
 		j = ft_strncmp(temp->env_x, (char *)"PATH=", 4);
 		if (j == 0)
-			break;
+			break ;
 		temp = temp->next;
 	}
 	if (temp == NULL)
 		return (NULL);
-	char *str = remove_debut(temp->env_x, 5);
+	str = remove_debut(temp->env_x, 5);
 	paths = ft_split(str, ':');
 	j = 0;
 	free(str);
 	return (paths);
 }
 
-int is_file(char *str)
+int	is_file(char *str)
 {
 	if (ft_strncmp(str, "./", 1) == SUCCESS)
 		return (FAILDE);
 	return (SUCCESS);
 }
 
-int other_fct(t_cmnd *cmnd, t_envi **env)
+void print_error(char *cmnd, int i)
 {
+		ft_putstr_fd(2, cmnd);
+	if  (i == 0)
+		ft_putstr_fd(2, (char *)": No such file or directory\n");
+	else if (i == 1)
+		ft_putstr_fd(2, (char *)": command not found\n");
+}
+
+int	other_fct(t_cmnd *cmnd, t_envi **env)
+{
+	char	*path_cmnd;
+	char	**paths;
+	char	*ptr;
+	int		i;
+
 	if (cmnd->cmnd[0] == NULL)
 		return (FAILDE);
 	if (access(cmnd->cmnd[0], X_OK) == SUCCESS)
 		return (execve(cmnd->cmnd[0], cmnd->cmnd, cmnd->env));
 	if (is_file(cmnd->cmnd[0]) != SUCCESS)
-		return (ft_putstr_fd(2, cmnd->cmnd[0]), ft_putstr_fd(2, (char *)": No such file or directory\n"), FAILDE);
-	char **paths = find_paths(env);
+		return (print_error(cmnd->cmnd[0], 0), FAILDE);
+	paths = find_paths(env);
 	if (paths == NULL)
-	{
-		ft_putstr_fd(2, cmnd->cmnd[0]);
-		ft_putstr_fd(2, (char *)": command not found\n");
-		return (FAILDE);
-	}
-	char *path_cmnd;
-	char *ptr;
-	ptr =  ft_strlcat((char *)"/", cmnd->cmnd[0]);
-	int i = 0;
+		return (print_error(cmnd->cmnd[0], 1), FAILDE);
+	ptr = ft_strlcat((char *)"/", cmnd->cmnd[0]);
+	i = 0;
 	while (paths[i] != NULL)
 	{
 		path_cmnd = ft_strlcat(paths[i++], ptr);
 		if (access(path_cmnd, X_OK) == SUCCESS)
 		{
 			if (execve(path_cmnd, cmnd->cmnd, cmnd->env) < 0)
-				return(printf("error f execve\n"), ft_free(paths), free(ptr), FAILDE);
+				return (printf("error f execve\n"),
+					ft_free(paths), free(ptr), FAILDE);
 			return (free(ptr), ft_free(paths), SUCCESS);
 		}
 		free(path_cmnd);
 	}
-	return (ft_putstr_fd(2, cmnd->cmnd[0]), ft_putstr_fd(2, (char *)": command not found\n")
-		, free(ptr), ft_free(paths), FAILDE);
+	return (print_error(cmnd->cmnd[0], 1),	free(ptr), ft_free(paths), FAILDE);
 }
 
-
-void free_tcmnd(t_cmnd *cmnd)
+int exec_cmnd(t_list *cmnd_list, t_global *glb)
 {
-	if (cmnd->cmnd != NULL)
-		ft_free(cmnd->cmnd);
-	if (cmnd->env != NULL)
-		ft_free(cmnd->env);
-	if (cmnd != NULL)
-		free(cmnd);
-}
+	t_cmnd	*cmnd;
+	int		red_type;
 
-int	exec_cmnd(t_list *cmnd_list, t_global *glb)
-{
-	t_cmnd *cmnd;
-	int		red_type = 0;
-
+	red_type = 0;
 	cmnd = initializ_cmnd(cmnd_list, glb->env);
+	int j = -1;
+	while (cmnd->cmnd[++j])
+		printf("cmnd->cmnd[%d] = %s\n", j, cmnd->cmnd[j]);
 	red_type = type_red(cmnd_list);
 	if (red_type == R_OUT || red_type == DR_OUT)
 		redirection_out(name_red(cmnd_list), red_type);
@@ -135,8 +142,7 @@ int	exec_cmnd(t_list *cmnd_list, t_global *glb)
 	if (builtin_fct(cmnd, glb) != SUCCESS)
 	{
 		if (other_fct(cmnd, &glb->env) != SUCCESS)
-			return (free_tcmnd(cmnd), exit(125), FAILDE);
+			return (free_tcmnd(cmnd), exit(127), FAILDE);
 	}
 	return (free_tcmnd(cmnd), exit(0), SUCCESS);
 }
-

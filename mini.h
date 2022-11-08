@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/08 17:15:04 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 22:20:44 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 # define DR_INP 17
 # define DR_OUT 18
 
+int x;
+
 
 //_____________________ -Env-Fcts- _____________________//
 
@@ -61,7 +63,7 @@ char    *name_var(char *env);
 void	add_front(t_envi **envi, t_envi *new_node);
 int		change_var_value(t_envi *env,char *name, char *value);
 
-t_envi	*find_var(t_envi **env, char *name);
+t_envi	*find_var(t_envi *env, char *name);
 
 //-------------------------------------------------------//
 
@@ -110,6 +112,7 @@ int		other_fct(t_cmnd *cmnd, t_envi **env);
 int		exec_cmnd(t_list *cmnd_list, t_global *glb);
 
 int		builtin_fct(t_cmnd *cmnd, t_global *glb);
+int		exec_builting(t_list *cmnd_list, t_global *glb);
 
 void	ft_free(char **str);
 void 	free_tcmnd(t_cmnd *cmnd);
@@ -138,12 +141,12 @@ int check_quotes(char *str);
 t_cmnd	*initializ_cmnd(t_list *cmnd_list, t_envi *env);
 char	**init_env_table(t_envi *envi, int size);
 char	**init_cmnd_table(t_list *cmnd, int size);
-void    handler_sig(t_global *glb);
+void    handler_sig(t_global *glb, int i);
 void	handler(int sig);
 
 
 
-
+int check_red_name(char *str);
 
 
 int	nbr_mots	(char *s, char c);

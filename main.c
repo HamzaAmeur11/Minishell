@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/08 17:46:50 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 00:27:26 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,6 @@
 #include <sys/wait.h>
 
 //protect all malloc in your minishell
-
-int	check_pipe(t_list *list, int t)
-{
-	t_list *temp;
-
-	temp = list;
-	while (t != 0 && temp->next != NULL)
-	{
-		if (temp->next->type == PIPE)
-			t--;
-		temp = temp->next;
-	}
-	if (t == 0 && temp->type == PIPE && temp->next == NULL)
-		return (FAILDE);
-	return (SUCCESS);
-}
 
 
 int exec_builting(t_list *cmnd_list, t_global *glb)
@@ -66,8 +50,6 @@ int exec_builting(t_list *cmnd_list, t_global *glb)
 	return (SUCCESS);
 }
 
-
-
 int	ft_pipes(t_global *glb, int n_cmnd)
 {
 	t_list	*current = NULL;
@@ -79,8 +61,6 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 	
 	i = 0;
 	cmnd = ft_split(glb->cmnd, '|');
-	int j = 0;
-	while (cmnd[j++] != NULL);
 	if (n_cmnd == 1)
 	{
 		current = init_list(glb, current, cmnd[0], check_quotes(cmnd[0]));
@@ -102,6 +82,7 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 			pid = fork();
 		if (pid == 0)
 		{
+			handler_sig(glb, 1);
 			dup2(glb->p_in, STDIN_FILENO);
 			close(glb->p_in);
 			dup2(glb->p_out, STDOUT_FILENO);
@@ -119,27 +100,21 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 		free_list(&current, current);
 	}
 	while (waitpid(-1, &glb->status, 0) > 0);
-	if (WIFEXITED(glb->status) == SUCCESS)
-		printf("pppppp\n");
+	if (WIFEXITED(glb->status))
+		glb->status = WEXITSTATUS(glb->status);
+	else if (WIFSIGNALED(glb->status))	
+		glb->status = 128 + WTERMSIG(glb->status);
 	close(lastfd);
-	
 	return (ft_free(cmnd), SUCCESS);
 }
-
-
-
 
 int check_red_name(char *str)
 {
 	int i = 0;
 	char c = str[i];
-	while (str[i] != 0 && str[i] == c)
+	while (str[i] != 0 && str[i] == c && i < 2)
 		i++;
-	if (c == '>')
-		c = '<';
-	else if (c == '<')
-		c = '>';
-	if (str[i] == 0 || str[i] == c)
+	if (str[i] == 0 || str[i] == '>' || str[i] == '<' || str[i] == '|')
 		return (FAILDE);
 	return (SUCCESS);
 }
@@ -150,11 +125,12 @@ int check_syntax(t_list **list)
 	t_list *cmnd = *list;
 	while (cmnd != NULL)
 	{
+		printf("init_list result : %s\n", cmnd->str);
 		if (cmnd->type == PIPE && (prev == -1 || cmnd->next == NULL))
 			return (ft_putstr_fd(2, "syntax error near unexpected token `|'\n"), free_list(list, *list), FAILDE);
 		if (cmnd->type == PIPE)
 			prev = -1;
-		if (cmnd->type != WORD && cmnd->type != PIPE && check_red_name(cmnd->str) == FAILDE)
+		if (cmnd->type != WORD && cmnd->type != PIPE && check_red_name(cmnd->str) == FAILDE && cmnd->next == NULL)
 			return (ft_putstr_fd(2, "syntax error near unexpected token `newline'\n"), free_list(list, *list), FAILDE);
 		if (cmnd->type != PIPE && cmnd->next != NULL && cmnd->next->type == PIPE)
 			prev = 0;
@@ -163,12 +139,11 @@ int check_syntax(t_list **list)
 	return (SUCCESS);
 }
 
-
 int shell(t_global *global)
 {
 	char *line;
 	int	n_cmnd;
-	while(1337)
+	while(42)
 	{
 		global->p_in = -1;
 		global->p_out = -1;
@@ -190,7 +165,6 @@ int shell(t_global *global)
 		unlink(".heredoc");
 		free(line);
 		free_list(&global->cmnd_list, global->cmnd_list);
-		printf("-->%d\n", global->status);
 	}
 	return (SUCCESS);
 }
@@ -198,12 +172,12 @@ int shell(t_global *global)
 int main(int ac, char **av, char **env)
 {
 	t_global *global;
+	(void)ac;
+	(void)av;
+	
 	global = (t_global *)malloc(sizeof(t_global));
 	global->env = init_envi(env);
-
-	//env valide
-	(void)ac;(void)av;
-	handler_sig(global);
+	handler_sig(global, 0);
 	shell(global);
 	return (SUCCESS);
 }

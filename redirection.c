@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:39:55 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 17:21:10 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 22:14:16 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char *name_red(t_list *cmnd_list)
 		temp = temp->next;
 	if (temp != NULL && temp->type != PIPE && temp->type != WORD)
 	{
-		while (temp->str[i] != 0 && (temp->str[i] == '>' || temp->str[i] == '<'))
+		while (temp->str[i] != 0 && (temp->str[i] == '>' || temp->str[i] == '<') && i < 2)
 			i++;
 		if (temp->str[i] != 0)
 			return (temp->str + i);

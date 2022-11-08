@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/07 17:23:35 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 00:48:19 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,16 +266,79 @@ int check_quotes(char *str)
 	return (0);
 }
 
+char **fill_doubly(char **temp, char **mots ,int key)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = 0;
+	while (mots[++i])
+		printf("55555 %s\n", mots[i]);
+	while (temp[j])
+		mots[i++] = ft_strdup(temp[j++]);
+	if (key == 0)
+		mots[i++] = ft_strdup((char *)"|");
+	mots[i] = NULL;
+	return (mots);
+}
+
+char **add_double(char **cmnd, int n_cmnd, int n_mots)
+{
+	char	**mots;
+	char	**temp;
+	int		i;
+	int		j;
+
+	mots = (char **)malloc(sizeof(char *) * (n_cmnd + n_mots + 1));
+	if (!mots)
+		return (NULL);
+	i = -1;
+	while (cmnd[++i])
+	{
+		temp = ft_split(cmnd[i], ' ');
+		if (cmnd[i + 1] == NULL)
+			j = 1;
+		else
+			j = 0;
+		mots = fill_doubly(temp, mots, j);
+		ft_free(temp);
+	}
+	return (mots);
+}
+
+char **split_pro_max(char *str)
+{
+	int		n_cmnd;
+	int		n_mots;
+	char	**cmnds;
+	char	**mots = NULL;
+	
+	n_cmnd = nbr_mots(str, '|');
+	n_mots = nbr_mots(str, ' ');
+	cmnds = ft_split(str, '|');
+	if (cmnds == NULL)
+		return (NULL);
+	mots = add_double(cmnds, n_cmnd, n_mots);
+	ft_free(cmnds);
+	return (mots);
+	
+}
+
 t_list *init_list(t_global *glb, t_list *head, char *str, int key)
 {
     char	**cmnd;
     char	*temp;
 	int		i;
 
-    cmnd = ft_split(str, ' ');
+    cmnd = split_pro_max(str);
+	i = 0;
+	if (!cmnd[0])
+		printf("holy Fuck\n");
+	while (cmnd[i])
+		printf("split_pro_max : %s\n", cmnd[i++]);
     i = 0;
     head = NULL;
-		
 	if (cmnd == NULL)
 		return (ft_putstr_fd(2, (char *)"Error quotes\n"), NULL);
     while (cmnd != NULL && cmnd[i] != NULL)
@@ -287,8 +350,12 @@ t_list *init_list(t_global *glb, t_list *head, char *str, int key)
 		free(temp);
     }
     ft_free(cmnd);
-	if (check_list(head) != SUCCESS)
-		return (free (str), free_list(&head, head), NULL);
+	t_list *tmp = head;
+	while (tmp != NULL)
+	{
+		printf("init list :  %s     %d\n", tmp->str, tmp->type);
+		tmp = tmp->next;
+	}
     return (head);
 }
 

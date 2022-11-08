@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:23:51 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/08 17:15:27 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 21:48:48 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_var(t_envi *env, char *str)
 {
-	t_envi *temp;
+	t_envi	*temp;
 
 	temp = env;
 	while (temp != NULL)
@@ -26,31 +26,32 @@ char	*get_var(t_envi *env, char *str)
 	return (NULL);
 }
 
-
-char *check_flags(t_envi *env, char *flag)
+char	*check_cd_flags(t_envi *env, char *flag, char *var_name)
 {
 	char	*old_pwd;
-	
+
+	old_pwd = get_var(env, var_name);
 	if (flag == NULL)
+		flag = (char *)"~";
+	if (old_pwd == NULL)
 	{
-		old_pwd = get_var(env, (char *)"HOME");
-		if (old_pwd == NULL)
-			ft_putstr_fd(2, "cd: HOME not set\n");
+		ft_putstr_fd(2, (char *)"cd: ");
+		ft_putstr_fd(2, var_name);
+		ft_putstr_fd(2, (char *)" not set\n");
 	}
-	else if (ft_strncmp(flag , (char *)"-", 1) == SUCCESS)
-	{
-		old_pwd = get_var(env, (char *)"OLDPWD");
-		if (old_pwd != NULL)
-			printf("~%s\n", old_pwd);
-		else
-			ft_putstr_fd(2, "cd: OLDPWD not set\n");
-	}
-	else if (ft_strncmp(flag , (char *)"~", 1) == SUCCESS)
-	{
-		old_pwd = get_var(env, (char *)"HOME");
-		if (old_pwd == NULL)
-			ft_putstr_fd(2, "cd: HOME not set\n");
-	}	
+	else if (ft_strncmp(flag, (char *)"-", 1) == SUCCESS)
+		printf("~%s\n", old_pwd);
+	return (old_pwd);
+}
+
+char	*check_flags(t_envi *env, char *flag)
+{
+	char	*old_pwd;
+
+	if (flag == NULL || ft_strncmp(flag, (char *)"~", 1) == SUCCESS)
+		old_pwd = check_cd_flags(env, flag, (char *)"HOME");
+	else if (ft_strncmp(flag, (char *)"-", 1) == SUCCESS)
+		old_pwd = check_cd_flags(env, flag, (char *)"OLDPWD");
 	else
 		return (NULL);
 	if (old_pwd != NULL)
@@ -62,21 +63,17 @@ int	is_flag(char *str)
 {
 	if (str == NULL)
 		return (SUCCESS);
-	else if (ft_strncmp(str, "-", 1) != SUCCESS)
-		return(SUCCESS);
-	else if (ft_strncmp(str, "~", 1) != SUCCESS)
+	else if (ft_strncmp(str, (char *)"-", 1) != SUCCESS)
 		return (SUCCESS);
-	return(FAILDE);
-		
+	else if (ft_strncmp(str, (char *)"~", 1) != SUCCESS)
+		return (SUCCESS);
+	return (FAILDE);
 }
-
-
-
 
 int	ft_cd(t_cmnd *cmnd, t_envi **env)
 {
-	char 	*old_pwd;
-	char 	*o_pwd;
+	char	*old_pwd;
+	char	*o_pwd;
 	char	pwd[1024];
 
 	getcwd(pwd, 1024);
@@ -92,7 +89,7 @@ int	ft_cd(t_cmnd *cmnd, t_envi **env)
 		}
 	}
 	getcwd(pwd, 1024);
-	change_var_value(find_var(env, "OLDPWD"), (char *)"OLDPWD", old_pwd);
-	change_var_value(find_var(env, "PWD"), (char *)"PWD", pwd);
+	change_var_value(find_var(*env, "OLDPWD"), (char *)"OLDPWD", old_pwd);
+	change_var_value(find_var(*env, "PWD"), (char *)"PWD", pwd);
 	return (free(o_pwd), free(old_pwd), SUCCESS);
 }

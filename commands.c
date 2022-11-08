@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:36:27 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/08 16:50:37 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/08 18:26:53 by megrisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	ft_pwd(t_cmnd *cmnd, t_envi **env)
 {
-	char pwd[1024];
-	
+	char	pwd[1024];
+
 	(void)cmnd;
 	(void)env;
 	getcwd(pwd, 1024);
@@ -29,7 +29,7 @@ int	ft_env(t_cmnd *cmnd, t_envi **env)
 
 	(void)cmnd;
 	temp = *env;
-	while (temp != NULL && temp->var_name != NULL && temp->var_value != NULL)
+	while (temp != NULL)
 	{
 		if (temp->var_value != NULL)
 			printf("%s=%s\n", temp->var_name, temp->var_value);
@@ -38,10 +38,11 @@ int	ft_env(t_cmnd *cmnd, t_envi **env)
 	return (SUCCESS);
 }
 
-
 int	echo_flag(char *str)
 {
-	int	i = 0;
+	int	i;
+
+	i = 0;
 	if (str[i] == '-')
 		i++;
 	else
@@ -61,7 +62,6 @@ int	ft_echo(t_cmnd *cmnd, t_envi **env)
 	i = 0;
 	key = 0;
 	(void)env;
-
 	while (cmnd->cmnd[++i] != NULL)
 	{
 		if (echo_flag(cmnd->cmnd[i]) == SUCCESS)
