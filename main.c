@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/09 00:27:26 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 23:29:47 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 	
 	i = 0;
 	cmnd = ft_split(glb->cmnd, '|');
+	int j = 0;
+	while (cmnd[j])
+		printf("----> %s\n", cmnd[j++]);
 	if (n_cmnd == 1)
 	{
 		current = init_list(glb, current, cmnd[0], check_quotes(cmnd[0]));
@@ -119,14 +122,25 @@ int check_red_name(char *str)
 	return (SUCCESS);
 }
 
+int check_pipe(char *str, int key)
+{
+	int i = 0;
+	while (str[i] != 0 && str[i] != '|')
+		i++;
+	if (key == 0 && i > 0 && str[i - 1] != '|')
+		return (SUCCESS);
+	else if (key == 1 && str[i] != 0 && str[i + 1] != 0 && str[i + 1] != '|')
+		return (SUCCESS);
+	return (FAILDE);
+}
+
 int check_syntax(t_list **list)
 {
 	int prev = -1;
 	t_list *cmnd = *list;
 	while (cmnd != NULL)
 	{
-		printf("init_list result : %s\n", cmnd->str);
-		if (cmnd->type == PIPE && (prev == -1 || cmnd->next == NULL))
+		if (cmnd->type == PIPE && ((prev == -1 && check_pipe(cmnd->str, 0) == FAILDE)|| (cmnd->next == NULL && check_pipe(cmnd->str, 1) == FAILDE)))
 			return (ft_putstr_fd(2, "syntax error near unexpected token `|'\n"), free_list(list, *list), FAILDE);
 		if (cmnd->type == PIPE)
 			prev = -1;

@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/08 22:20:44 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 23:10:01 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,9 @@ void	handler(int sig);
 
 
 int check_red_name(char *str);
+int	next_q(char *s, int i, char c);
+char **split_pro_max(char *str);
+
 
 
 int	nbr_mots	(char *s, char c);

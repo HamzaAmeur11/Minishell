@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:46:29 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/08 22:16:12 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 23:24:11 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,15 @@ int exec_cmnd(t_list *cmnd_list, t_global *glb)
 {
 	t_cmnd	*cmnd;
 	int		red_type;
+	t_list *tmp = cmnd_list;
+	while (tmp != NULL)
+	{
+		printf("--> cmnd : %s\n", tmp->str);
+		tmp = tmp->next;
+	}
 
 	red_type = 0;
 	cmnd = initializ_cmnd(cmnd_list, glb->env);
-	int j = -1;
-	while (cmnd->cmnd[++j])
-		printf("cmnd->cmnd[%d] = %s\n", j, cmnd->cmnd[j]);
 	red_type = type_red(cmnd_list);
 	if (red_type == R_OUT || red_type == DR_OUT)
 		redirection_out(name_red(cmnd_list), red_type);

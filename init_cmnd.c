@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:48:42 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/09 00:45:01 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 14:03:10 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ t_cmnd *initializ_cmnd(t_list *cmnd_list, t_envi *env)
 		temp = temp->next;
 	while (temp != NULL && temp->type == WORD && i++ > -1)
 		temp = temp->next;
-	printf("2222****\n");
 	cmnd->cmnd = init_cmnd_table(cmnd_list, i + 1);
 	cmnd->env = init_env_table(env, size_envi(env) + 1);
 	return (cmnd);

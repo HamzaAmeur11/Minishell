@@ -6,20 +6,18 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 17:42:01 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/07 12:31:31 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 23:13:55 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-int	next_q(char *s, int i, char c, int key)
+int	next_q(char *s, int i, char c)
 {
 	i++;
 	while (s[i] != 0 && s[i] != c)
 		i++;
-	if (s[i] == 0 && key == 0)
-		return(FAILDE);
-	if (key == 1 && s[i] == 0)
+	if (s[i] == 0)
 		return (i);
 	return (i + 1);
 }
@@ -37,7 +35,7 @@ int	nbr_mots	(char *s, char c)
 	{
 		if (s[i] == DQUOTE || s[i] == SQUOTE)
 		{
-			i = next_q(s, i, s[i], 0);
+			i = next_q(s, i, s[i]);
 			if (i == FAILDE)
 				return (FAILDE);
 		}
@@ -78,7 +76,7 @@ int find_char(char *str, int pos, char c, int id)
 	while (str[pos] != 0 && str[pos] != c)
 	{
 		if (str[pos] == DQUOTE || str[pos] == SQUOTE)
-			pos = next_q(str, pos, str[pos], 0);
+			pos = next_q(str, pos, str[pos]);
 		else
 			pos++;
 	}

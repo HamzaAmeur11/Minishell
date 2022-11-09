@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: megrisse <megrisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: hameur <hameur@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 18:05:22 by hmeur             #+#    #+#              #
-#    Updated: 2022/11/08 01:40:11 by megrisse         ###   ########.fr        #
+#    Updated: 2022/11/09 23:12:00 by hameur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRC :=	main.c \
 		env.c \
 		env_utils.c \
 		exec_cmnds.c \
+		split_pro_max.c \
 		ft_split.c \
 		ft_itoa.c \
 		t_list.c \

@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/09 00:48:19 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/09 23:11:48 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,11 @@ int is_word(char *str)
 
 int check_type(char *str, int key)
 {
+	int i = 0;
 	if (key == 1)
 		return (WORD);
     else if (key == 0 && is_word(str) == SUCCESS)
         return (WORD);
-    else if (str[0] == '|' && str[1] == 0)
-        return (PIPE);
     else if (str[0] == '>' && str[1] != '>')
         return (R_OUT);
     else if (str[0] == '<' && str [1] != '<')
@@ -52,6 +51,15 @@ int check_type(char *str, int key)
         return (DR_OUT);
     else if (str[0] == '<' && str[1] == '<')
         return (DR_INP);
+    else if (str[0] == '|')
+        return (PIPE);
+	else if (is_word(str) == FAILDE)
+	{
+		while (str[i] != 0 && str[i] != '|')
+			i++;
+		if (str[i] == '|')
+			return (PIPE);
+	}
     return (FAILDE);
 }
 
@@ -266,64 +274,48 @@ int check_quotes(char *str)
 	return (0);
 }
 
-char **fill_doubly(char **temp, char **mots ,int key)
-{
-	int	i;
-	int	j;
+// char **fill_doubly(char **temp, char **mots ,int key)
+// {
+// 	int	i;
+// 	int	j;
 
-	i = -1;
-	j = 0;
-	while (mots[++i])
-		printf("55555 %s\n", mots[i]);
-	while (temp[j])
-		mots[i++] = ft_strdup(temp[j++]);
-	if (key == 0)
-		mots[i++] = ft_strdup((char *)"|");
-	mots[i] = NULL;
-	return (mots);
-}
+// 	i = -1;
+// 	j = 0;
+// 	while (mots[++i])
+// 		printf("55555 %s\n", mots[i]);
+// 	while (temp[j])
+// 		mots[i++] = ft_strdup(temp[j++]);
+// 	if (key == 0)
+// 		mots[i++] = ft_strdup((char *)"|");
+// 	mots[i] = NULL;
+// 	return (mots);
+// }
 
-char **add_double(char **cmnd, int n_cmnd, int n_mots)
-{
-	char	**mots;
-	char	**temp;
-	int		i;
-	int		j;
+// char **add_double(char **cmnd, int n_cmnd, int n_mots)
+// {
+// 	char	**mots;
+// 	char	**temp;
+// 	int		i;
+// 	int		j;
 
-	mots = (char **)malloc(sizeof(char *) * (n_cmnd + n_mots + 1));
-	if (!mots)
-		return (NULL);
-	i = -1;
-	while (cmnd[++i])
-	{
-		temp = ft_split(cmnd[i], ' ');
-		if (cmnd[i + 1] == NULL)
-			j = 1;
-		else
-			j = 0;
-		mots = fill_doubly(temp, mots, j);
-		ft_free(temp);
-	}
-	return (mots);
-}
+// 	mots = (char **)malloc(sizeof(char *) * (n_cmnd + n_mots + 1));
+// 	if (!mots)
+// 		return (NULL);
+// 	i = -1;
+// 	while (cmnd[++i])
+// 	{
+// 		temp = ft_split(cmnd[i], ' ');
+// 		if (cmnd[i + 1] == NULL)
+// 			j = 1;
+// 		else
+// 			j = 0;
+// 		mots = fill_doubly(temp, mots, j);
+// 		ft_free(temp);
+// 	}
+// 	return (mots);
+// }
 
-char **split_pro_max(char *str)
-{
-	int		n_cmnd;
-	int		n_mots;
-	char	**cmnds;
-	char	**mots = NULL;
-	
-	n_cmnd = nbr_mots(str, '|');
-	n_mots = nbr_mots(str, ' ');
-	cmnds = ft_split(str, '|');
-	if (cmnds == NULL)
-		return (NULL);
-	mots = add_double(cmnds, n_cmnd, n_mots);
-	ft_free(cmnds);
-	return (mots);
-	
-}
+
 
 t_list *init_list(t_global *glb, t_list *head, char *str, int key)
 {
@@ -332,11 +324,6 @@ t_list *init_list(t_global *glb, t_list *head, char *str, int key)
 	int		i;
 
     cmnd = split_pro_max(str);
-	i = 0;
-	if (!cmnd[0])
-		printf("holy Fuck\n");
-	while (cmnd[i])
-		printf("split_pro_max : %s\n", cmnd[i++]);
     i = 0;
     head = NULL;
 	if (cmnd == NULL)
@@ -346,16 +333,10 @@ t_list *init_list(t_global *glb, t_list *head, char *str, int key)
         temp = change_str(glb, cmnd[i++]);
 		
         if (add_back_list(&head, new_list(temp, key, check_quotes(cmnd[i - 1]))) != SUCCESS)
-            return (ft_free(cmnd), free(temp), free_list(&head, head), ft_putstr_fd(2, "Error pipe\n"), NULL);//free
+            return (ft_free(cmnd), free(temp), free_list(&head, head), NULL);
 		free(temp);
     }
     ft_free(cmnd);
-	t_list *tmp = head;
-	while (tmp != NULL)
-	{
-		printf("init list :  %s     %d\n", tmp->str, tmp->type);
-		tmp = tmp->next;
-	}
     return (head);
 }
 
