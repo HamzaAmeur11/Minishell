@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 15:36:22 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/10 18:37:07 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/10 22:29:00 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ char	**split_pro_max(char *str)
 		string = add_value(str, &i);
 		if (string == NULL)
 			return (ft_free(ret), NULL);
+		else if (string[0] == 0)
+			return (free(string), ret);
 		ret = ft_realloc(ret, string);
 		free(string);
 	}

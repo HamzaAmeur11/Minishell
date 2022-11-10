@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/10 19:24:56 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/10 23:04:01 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct t_global
 	int				p_out;
 	int				fd[2];
 	int				lastfd;
+	int				pid;
 
 }	t_global;
 
@@ -98,13 +99,16 @@ char	*ft_strlcat(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int i);
 char	*ft_itoa(int nbr);
 
+//					PARSING				//
+void	init_glb(t_global *glb, int *n_cmnd);
+t_list	*init_list(t_global *glb, t_list *head, char *str, int key);
 char	*change_str(t_global *glb, char *str);
 char	*remove_debut(char *s, int i);
-int		other_fct(t_cmnd *cmnd, t_envi **env);
-int		exec_cmnd(t_list *cmnd_list, t_global *glb);
-char	**find_paths(t_envi **env);
-int		is_word(char *str);
 int		check_type(char *str, int key);
+int		is_word(char *str);
+int		check_syntax_utils(t_list **list, t_list *cmnd, int *prev);
+int		check_syntax(t_list **list);
+int		init_and_check(t_global *glb, char *line);
 void	add_to_next_quote(t_global *glb, char *str, char *ret, int **tab);
 void	add_var(t_global *glb, char *str, char *ret, int **tab);
 char	*nume_var(char *str, int *id);
@@ -112,27 +116,33 @@ int		check_quotes(char *str);
 int		add_back_list(t_list **head, t_list *new_node);
 t_list	*new_list(char *str, int key, int quote);
 void	print_error(char *cmnd, int i);
-int	next_q(char *s, int i, char c);
-int	is_file(char *str);
+int		next_q(char *s, int i, char c);
+int		is_file(char *str);
+int		is_special(char c, int key);
+void	free_list(t_list **root, t_list *node);
 
-int	is_special(char c, int key);
+//					EXECUTION			//
+char	**find_paths(t_envi **env);
+int		other_fct(t_cmnd *cmnd, t_envi **env);
+int		exec_cmnd(t_list *cmnd_list, t_global *glb);
+int		check_pipe(char *str, int key);
+int		exec_onecmnd(t_global *glb, t_list *current, char **cmnd);
+int		pipe_utils(t_global *glb, t_list *current, char **cmnd, int n_cmnd);
+int		builtin_fct(t_cmnd *cmnd, t_global *glb);
+int		exec_builting(t_list *cmnd_list, t_global *glb);
+t_envi	*find_var(t_envi *env, char *name);
 
-
-
-void	ft_free(char **str);
-void	free_tcmnd(t_cmnd *cmnd);
+//					BUILT-IN			//
 int		ft_pwd(t_cmnd *cmnd, t_envi **env);
 int		ft_exit(t_global *glb);
 int		ft_cd(t_cmnd *cmnd, t_envi **env);
 int		ft_echo(t_cmnd *cmnd, t_envi **env);
 int		ft_env(t_cmnd *cmnd, t_envi **env);
 int		ft_export(t_cmnd *cmnd, t_envi **env);
-t_envi	*find_var(t_envi *env, char *name);
 int		ft_unset(t_cmnd *cmnd, t_envi **env);
-int		builtin_fct(t_cmnd *cmnd, t_global *glb);
-int		exec_builting(t_list *cmnd_list, t_global *glb);
-void	free_list(t_list **root, t_list *node);
-t_list	*init_list(t_global *glb, t_list *head, char *str, int key);
+
+void	ft_free(char **str);
+void	free_tcmnd(t_cmnd *cmnd);
 
 //___________redirection_fcts______________
 int		redirection_out(char *file_name, int red_type);
@@ -150,10 +160,5 @@ char	**split_pro_max(char *str);
 int		check_red_name(char *str);
 int		next_q(char *s, int i, char c);
 int		nbr_mots(char *s, char c, int i);
-
-
-
-
-
 
 #endif	//MINI_H
