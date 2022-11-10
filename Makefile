@@ -6,7 +6,7 @@
 #    By: hameur <hameur@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 18:05:22 by hmeur             #+#    #+#              #
-#    Updated: 2022/11/09 23:12:00 by hameur           ###   ########.fr        #
+#    Updated: 2022/11/10 19:09:31 by hameur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,21 +23,26 @@ CFLAGS += -Wall -Werror -Wextra
 LDFLAGS += -lreadline
 
 SRC :=	main.c \
-		commands.c \
-		env.c \
+		commands/cd.c \
+		commands/commands.c \
+		commands/export.c \
+		commands/unset.c \
+		change_str.c \
 		env_utils.c \
+		env.c \
+		exec_built.c \
 		exec_cmnds.c \
-		split_pro_max.c \
-		ft_split.c \
+		ft_free.c \
 		ft_itoa.c \
+		ft_split.c \
+		init_cmnd.c \
+		redirection.c\
+		signals.c \
+		split_pro_max.c \
 		t_list.c \
 		utils.c \
-		redirection.c\
-		init_cmnd.c \
-		commands/cd.c \
-		commands/env_vars.c \
-		signals.c \
-		exec_built.c \
+		utils1.c \
+		utils2.c \
 
 
 OBJS := $(SRC:.c=.o)

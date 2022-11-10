@@ -1,40 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/30 15:25:42 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/10 16:18:20 by hameur           ###   ########.fr       */
+/*   Created: 2022/11/10 19:08:34 by hameur            #+#    #+#             */
+/*   Updated: 2022/11/10 19:11:03 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-void	handler(int sig)
+int	is_file(char *str)
 {
-	g_x = 128 + sig;
-	printf("\n");
-	//rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	if (ft_strncmp(str, "./", 1) == SUCCESS)
+		return (FAILDE);
+	return (SUCCESS);
 }
 
-void	ft_quit(int i)
+void	print_error(char *cmnd, int i)
 {
-	printf("Quit : %d\n", i);
-	exit (i);
-}
-
-void	handler_sig(t_global *glb, int i)
-{
+	ft_putstr_fd(2, cmnd);
 	if (i == 0)
-	{
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, &handler);
-		glb->status = g_x;
-	}
-	else
-		signal(SIGQUIT, &ft_quit);
+		ft_putstr_fd(2, (char *)": No such file or directory\n");
+	else if (i == 1)
+		ft_putstr_fd(2, (char *)": command not found\n");
 }
