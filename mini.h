@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/10 23:04:01 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/10 23:06:47 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ int		pipe_utils(t_global *glb, t_list *current, char **cmnd, int n_cmnd);
 int		builtin_fct(t_cmnd *cmnd, t_global *glb);
 int		exec_builting(t_list *cmnd_list, t_global *glb);
 t_envi	*find_var(t_envi *env, char *name);
+void	init_fds(t_global *glb, int *i);
+void	exec_child(t_global *glb, t_list *current);
 
 //					BUILT-IN			//
 int		ft_pwd(t_cmnd *cmnd, t_envi **env);

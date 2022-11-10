@@ -6,15 +6,11 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/10 22:58:30 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/10 23:24:57 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini.h"
-#include <sys/types.h>
-#include <sys/wait.h>
-
-//protect all malloc in your minishell
 
 int	pipe_utils(t_global *glb, t_list *current, char **cmnd, int n_cmnd)
 {
@@ -39,7 +35,6 @@ int	pipe_utils(t_global *glb, t_list *current, char **cmnd, int n_cmnd)
 			exec_child(glb, current);
 		init_fds(glb, &i);
 		free_list(&current, current);
-		i++;
 	}
 	return (SUCCESS);
 }
@@ -48,11 +43,9 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 {
 	t_list	*current;
 	char	**cmnd;
-	int		i;
 
 	current = NULL;
 	glb->lastfd = -1;
-	i = 0;
 	glb->pid = 1;
 	cmnd = ft_split(glb->cmnd, '|');
 	if (n_cmnd == 1 && exec_onecmnd(glb, current, cmnd) == SUCCESS)
