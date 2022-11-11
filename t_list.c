@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:41:59 by hmeur             #+#    #+#             */
-/*   Updated: 2022/11/10 20:53:34 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 14:10:32 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,11 @@ t_list	*init_list(t_global *glb, t_list *head, char *str, int key)
 	int		i;
 
 	cmnd = split_pro_max(str);
-	if (cmnd == NULL)
-		return (NULL);
 	i = 0;
 	head = NULL;
 	if (cmnd == NULL)
 		return (ft_putstr_fd(2, (char *)"Error quotes\n"), NULL);
-	while (cmnd != NULL && cmnd[i] != NULL)
+	while (cmnd[i] != NULL)
 	{
 		temp = change_str(glb, cmnd[i++]);
 		if (add_back_list(&head, new_list(temp, key,

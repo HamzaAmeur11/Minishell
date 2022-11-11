@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:59:40 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/10 23:24:57 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 16:31:00 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	pipe_utils(t_global *glb, t_list *current, char **cmnd, int n_cmnd)
 		if (glb->pid > 0)
 			glb->pid = fork();
 		if (glb->pid < 0)
-			return (ft_free(cmnd), ft_putstr_fd(2,
+			return (ft_putstr_fd(2,
 					"fork: Resource temporarily unavailable\n"), 1);
 		if (glb->pid == 0)
 			exec_child(glb, current);
@@ -37,6 +37,14 @@ int	pipe_utils(t_global *glb, t_list *current, char **cmnd, int n_cmnd)
 		free_list(&current, current);
 	}
 	return (SUCCESS);
+}
+
+void	exit_status(t_global *glb)
+{
+	if (WIFEXITED(glb->status))
+		glb->status = WEXITSTATUS(glb->status);
+	else if (WIFSIGNALED(glb->status))
+		glb->status = 128 + WTERMSIG(glb->status);
 }
 
 int	ft_pipes(t_global *glb, int n_cmnd)
@@ -50,15 +58,11 @@ int	ft_pipes(t_global *glb, int n_cmnd)
 	cmnd = ft_split(glb->cmnd, '|');
 	if (n_cmnd == 1 && exec_onecmnd(glb, current, cmnd) == SUCCESS)
 		return (ft_free(cmnd), SUCCESS);
-	free_list(&current, current);
 	if (pipe_utils(glb, current, cmnd, n_cmnd) == FAILDE)
-		return (FAILDE);
+		return (ft_free(cmnd), FAILDE);
 	while (waitpid(-1, &glb->status, 0) > 0)
 		;
-	if (WIFEXITED(glb->status))
-		glb->status = WEXITSTATUS(glb->status);
-	else if (WIFSIGNALED(glb->status))
-		glb->status = 128 + WTERMSIG(glb->status);
+	exit_status(glb);
 	close(glb->lastfd);
 	return (ft_free(cmnd), SUCCESS);
 }
@@ -84,7 +88,7 @@ int	shell(t_global *global)
 		if (init_and_check(global, line) == FAILDE)
 			continue ;
 		n_cmnd = nbr_mots(global->cmnd, '|', n_cmnd);
-		global->status = ft_pipes(global, n_cmnd);
+		ft_pipes(global, n_cmnd);
 		unlink(".heredoc");
 		free_list(&global->cmnd_list, global->cmnd_list);
 	}

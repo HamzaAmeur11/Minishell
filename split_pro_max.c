@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 15:36:22 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/10 22:29:00 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 13:11:57 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,3 +129,23 @@ char	**split_pro_max(char *str)
 	}
 	return (ret);
 }
+
+// int main(int ac, char **av)
+// {
+// 	char **str;
+// 	int i = -1;
+// 	while (1)
+// 	{
+// 		i = 0;
+// 		char *line = readline("zebi=>");
+// 		str = split_pro_max (line);
+// 		while (str[i])
+// 			printf("split pro max : %s\n", str[i++]);
+// 		// str = ft_split(line, '|');
+// 		// i = -1;
+// 		// while (str != NULL && str[++i])
+// 		// 	printf("%s\n", str[i]);
+// 		ft_free(str);
+// 		printf("\n");
+// 	}
+// }

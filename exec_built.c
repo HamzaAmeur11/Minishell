@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 01:37:01 by megrisse          #+#    #+#             */
-/*   Updated: 2022/11/10 22:52:24 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 16:17:42 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,5 @@ int	exec_onecmnd(t_global *glb, t_list *current, char **cmnd)
 	current = init_list(glb, current, cmnd[0], check_quotes(cmnd[0]));
 	if (exec_builting(current, glb) == SUCCESS)
 		return (free_list(&current, current), SUCCESS);
-	return (FAILDE);
+	return (free_list(&current, current), FAILDE);
 }
