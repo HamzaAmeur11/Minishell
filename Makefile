@@ -6,7 +6,7 @@
 #    By: hameur <hameur@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 18:05:22 by hmeur             #+#    #+#              #
-#    Updated: 2022/11/10 22:54:00 by hameur           ###   ########.fr        #
+#    Updated: 2022/11/11 21:28:31 by hameur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,13 @@ HEADER := mini.h
 
 CC := gcc
 
-CFLAGS += -Wall -Werror -Wextra
+CFLAGS := -Wall -Werror -Wextra
 
-LDFLAGS += -lreadline
+LDFLAGS := -lreadline
+
+_L := -L /Users/hameur/.brew/opt/readline/lib
+
+_I := -I /Users/hameur/.brew/opt/readline/include
 
 SRC :=	main.c \
 		commands/cd.c \
@@ -52,10 +56,10 @@ all :	$(NAME)
 		@echo "Making Minishell"
 
 $(NAME) :	$(OBJS)
-	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)
+	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS) $(_L) $(_I) 
 
 %.o : %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@ 
+	$(CC) $(CFLAGS) -c $< -o $@  $(_I)
 
 clean :
 	@rm -rf $(OBJS)

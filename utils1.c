@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 16:12:09 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/10 19:10:22 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 17:12:54 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ int	is_word(char *str)
 	return (SUCCESS);
 }
 
-int	is_special(char c, int key)
+int	is_special(char c)
 {
-	if (key == 1)
-		return (SUCCESS);
 	if (c == '|')
 		return (PIPE);
 	else if (c == '>')

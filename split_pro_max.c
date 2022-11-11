@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 15:36:22 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/11 13:11:57 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 17:31:16 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*add_special(char *str, char c, int *i)
 {
 	int	sp;
 
-	sp = is_special(c, 0);
+	sp = is_special(c);
 	if (sp == PIPE)
 		return ((*i)++, ft_strdup((char *)"|"));
 	else if (sp == R_INP && str[(*i) + 1] == c)
@@ -33,12 +33,10 @@ char	*add_special(char *str, char c, int *i)
 int	add_value_utils(char *s, char *str, int *i, int *j)
 {
 	char	c;
-	int		key;
 
 	c = 0;
-	key = 0;
 	while (str[(*i)] != 0 && str[(*i)] != ' '
-		&& is_special(str[(*i)], key) == FAILDE && key == 0)
+		&& is_special(str[(*i)]) == FAILDE)
 	{
 		if ((str[(*i)] == SQUOTE || str[(*i)] == DQUOTE) && c == 0)
 		{
@@ -62,19 +60,13 @@ char	*add_value(char *str, int *i)
 {
 	char	s[1024];
 	int		j;
-	int		key;
-	char	c;
 
 	j = *i;
-	key = 0;
-	c = 0;
 	while (str[(*i)] != 0 && str[(*i)] == ' ')
 		(*i)++;
-	if (is_special(str[j], 0) != FAILDE)
+	if (is_special(str[j]) != FAILDE)
 		return (add_special(str, str[(*i)], i));
 	j = 0;
-	while (str[(*i)] != 0 && str[(*i)] == ' ')
-		(*i)++;
 	if (add_value_utils(s, str, i, &j) != SUCCESS)
 		return (NULL);
 	while (str[(*i)] == ' ')
@@ -129,23 +121,3 @@ char	**split_pro_max(char *str)
 	}
 	return (ret);
 }
-
-// int main(int ac, char **av)
-// {
-// 	char **str;
-// 	int i = -1;
-// 	while (1)
-// 	{
-// 		i = 0;
-// 		char *line = readline("zebi=>");
-// 		str = split_pro_max (line);
-// 		while (str[i])
-// 			printf("split pro max : %s\n", str[i++]);
-// 		// str = ft_split(line, '|');
-// 		// i = -1;
-// 		// while (str != NULL && str[++i])
-// 		// 	printf("%s\n", str[i]);
-// 		ft_free(str);
-// 		printf("\n");
-// 	}
-// }

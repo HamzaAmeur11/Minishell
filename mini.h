@@ -6,7 +6,7 @@
 /*   By: hameur <hameur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 22:44:38 by hameur            #+#    #+#             */
-/*   Updated: 2022/11/10 23:06:47 by hameur           ###   ########.fr       */
+/*   Updated: 2022/11/11 17:12:38 by hameur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_list	*new_list(char *str, int key, int quote);
 void	print_error(char *cmnd, int i);
 int		next_q(char *s, int i, char c);
 int		is_file(char *str);
-int		is_special(char c, int key);
+int		is_special(char c);
 void	free_list(t_list **root, t_list *node);
 
 //					EXECUTION			//
